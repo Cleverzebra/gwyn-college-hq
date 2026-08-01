@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Gwyn, College Visit Planner</title>
+<style>
+  :root{
+    --dark-blue:#1B3A5C; --mid-blue:#2E6CA4; --light-bg:#EBF2FA; --ink:#1f2733;
+    --reach-bg:#FDECEA; --reach-ink:#B71C1C;
+    --match-bg:#EAF4EA; --match-ink:#1B5E20;
+    --likely-bg:#FFF8E1; --likely-ink:#795800;
+    --safety-bg:#F3F0FA; --safety-ink:#4A148C;
+    --border:#d8dee6; --muted:#667; --good:#1B8A4B; --warn:#C77700; --bad:#B71C1C;
+    --card:#fff; --shadow:0 1px 3px rgba(20,40,70,.08),0 4px 16px rgba(20,40,70,.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);
+    background:linear-gradient(180deg,#f4f7fb 0%,#eef2f7 100%);line-height:1.5;font-size:15px}
+  a{color:var(--mid-blue);text-decoration:none}
+  a:hover{text-decoration:underline}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 18px 70px}
+
+  header.hero{background:linear-gradient(135deg,var(--dark-blue),#274d75);color:#fff;border-radius:16px;
+    padding:22px 26px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  header.hero h1{font-size:25px;font-weight:800;letter-spacing:-.3px}
+  header.hero .sub{opacity:.92;font-size:14.5px;margin-top:4px}
+  header.hero .chips{margin-top:13px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:5px 11px;
+    border-radius:999px;font-size:12.5px;font-weight:600}
+  .chip b{font-weight:800}
+  #todayline{font-size:12px;opacity:.82;font-weight:600;margin-bottom:7px;letter-spacing:.2px}
+  .backbar{margin:14px 0 4px;font-size:13.5px;font-weight:700;display:flex;gap:16px;flex-wrap:wrap}
+
+  .startnow{background:var(--light-bg);border:1px solid #c5d8ee;border-left:5px solid var(--mid-blue);border-radius:11px;padding:13px 16px;margin:16px 0}
+  .startnow .k{font-size:11px;font-weight:800;color:var(--mid-blue);letter-spacing:.6px}
+  .startnow .t{font-weight:800;margin:3px 0;font-size:15.5px}
+  .startnow .d{font-size:13px;color:#33414f}
+
+  /* tabs */
+  .tabs{display:flex;flex-wrap:wrap;gap:7px;margin:18px 0 6px}
+  .tabs button{border:1px solid var(--border);background:#fff;border-radius:10px;padding:9px 14px;font-size:13.5px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .tabs button.active{background:var(--dark-blue);color:#fff;border-color:var(--dark-blue)}
+  .panel{display:none}
+  .panel.active{display:block}
+
+  h2.sec{font-size:18px;color:var(--dark-blue);font-weight:800;margin:22px 0 8px}
+  h3.cl{font-size:15.5px;color:var(--dark-blue);font-weight:800;margin:18px 0 2px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  h3.cl .badge{background:var(--mid-blue);color:#fff;border-radius:7px;font-size:11px;font-weight:800;padding:2px 8px}
+  .cl-note{color:var(--muted);font-size:12.5px;margin:0 0 8px}
+  .lead{color:var(--muted);font-size:13.5px;margin:-2px 0 12px}
+
+  .statbar{display:flex;flex-wrap:wrap;gap:10px;margin:8px 0 4px}
+  .stat{background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 14px;box-shadow:var(--shadow);min-width:120px}
+  .stat .n{font-size:22px;font-weight:850;color:var(--dark-blue);line-height:1}
+  .stat .l{font-size:11.5px;color:var(--muted);margin-top:3px;font-weight:600}
+
+  .school{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow);margin:9px 0}
+  .school.visited{border-left:4px solid var(--good)}
+  .school.high{border-left:4px solid var(--mid-blue)}
+  .school .top{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+  .school .nm{font-weight:800;font-size:15.5px;color:var(--dark-blue)}
+  .school .loc{color:var(--muted);font-size:12.5px}
+  .tags{display:flex;gap:5px;flex-wrap:wrap;margin:6px 0}
+  .tg{display:inline-block;font-size:10px;font-weight:800;padding:2px 7px;border-radius:5px;white-space:nowrap}
+  .t-reach{background:var(--reach-bg);color:var(--reach-ink)}
+  .t-match{background:var(--match-bg);color:var(--match-ink)}
+  .t-likely{background:var(--likely-bg);color:var(--likely-ink)}
+  .t-safety{background:var(--safety-bg);color:var(--safety-ink)}
+  .tg.cns{background:#E7F0F8;color:#1F5C92}
+  .tg.eval{background:#fff3d6;color:#8a5a00;border:1px solid #f0d999}
+  .tg.vis{background:#E7F6EC;color:#1B5E20}
+  .linkrow{display:flex;gap:8px;flex-wrap:wrap;margin:7px 0}
+  .lkbtn{display:inline-block;border-radius:7px;padding:4px 9px;font-size:11.5px;font-weight:700;white-space:nowrap;border:1px solid}
+  .lk-visit{background:#eef6ff;border-color:#cfe0f1;color:#1B3A5C}
+  .lk-reg{background:#eef9f1;border-color:#cdebd6;color:#1B5E20}
+  .lk-virt{background:#f6f2fb;border-color:#e0d4f0;color:#4A148C}
+  .lk-npc{background:#fff8e8;border-color:#f0e2a8;color:#795800}
+  .lkbtn:hover{text-decoration:none;filter:brightness(.97)}
+  .meta{font-size:12.5px;margin:5px 0 2px}
+  .meta b{color:var(--dark-blue)}
+  .summer{font-size:12px;color:#0d5a32;background:#eef9f1;border:1px solid #cdebd6;border-radius:7px;padding:5px 9px;margin-top:6px}
+  .summer.none{color:#7a5b00;background:#fff8e1;border-color:#f0e2a8}
+  .ctrls{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:10px;border-top:1px dashed #e6ebf1;padding-top:9px}
+  .ctrls label{font-size:10.5px;font-weight:800;color:var(--muted);letter-spacing:.3px;display:block;margin-bottom:2px}
+  .ctrls select,.ctrls input{width:100%;border:1px solid var(--border);border-radius:7px;padding:6px 7px;font-size:12.5px;font-family:inherit;color:var(--ink);background:#fff}
+  .ctrls input::placeholder{color:#9aa3af}
+  select.st-reg{background:#eef9f1} select.st-vis{background:#e7f6ec} select.st-no{background:#fff}
+  select.pr-high{background:#eaf1fb;font-weight:700}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:15px 17px;box-shadow:var(--shadow);margin:12px 0}
+  .callout{background:#fff8e1;border:1px solid #f0e2a8;border-radius:10px;padding:11px 14px;font-size:13px;color:#5c4d12;margin:12px 0}
+  .info{background:#fbfdff;border:1px solid #cfe0f1;border-left:5px solid var(--mid-blue);border-radius:10px;padding:11px 15px;font-size:13px;margin:12px 0}
+
+  .toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px}
+  .tbtn{border:1px solid var(--border);background:#fff;border-radius:9px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer;color:var(--ink)}
+  .tbtn:hover{border-color:var(--mid-blue)}
+  .tbtn.warn{color:var(--bad)}
+
+  /* rubric */
+  .pick{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:6px 0 12px}
+  .pick select{border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:14px;font-weight:700;font-family:inherit;min-width:240px}
+  table.rub{width:100%;border-collapse:collapse;font-size:13px}
+  table.rub td{padding:8px 6px;border-bottom:1px solid #eef1f5;vertical-align:middle}
+  table.rub td.cri{font-weight:700;width:42%}
+  table.rub td.cri small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+  .score{display:flex;gap:4px;flex-wrap:wrap}
+  .score button{width:30px;height:30px;border-radius:7px;border:1px solid var(--border);background:#fff;font-weight:800;font-size:13px;cursor:pointer;color:var(--muted)}
+  .score button.on{background:var(--mid-blue);color:#fff;border-color:var(--mid-blue)}
+  .score button.na.on{background:#9aa3af;border-color:#9aa3af}
+  .rubtot{font-size:14px;font-weight:800;color:var(--dark-blue);margin-top:10px}
+  textarea{width:100%;border:1px solid var(--border);border-radius:8px;padding:9px 11px;font-size:13px;font-family:inherit;color:var(--ink);min-height:64px;resize:vertical}
+  .verdict{display:flex;gap:7px;flex-wrap:wrap;margin:6px 0}
+  .verdict button{border:1px solid var(--border);background:#fff;border-radius:8px;padding:7px 13px;font-size:12.5px;font-weight:700;cursor:pointer}
+  .verdict button.up.on{background:#E7F6EC;border-color:#1B8A4B;color:#1B5E20}
+  .verdict button.same.on{background:#FFF8E1;border-color:#C77700;color:#795800}
+  .verdict button.down.on{background:#FDECEA;border-color:#B71C1C;color:#B71C1C}
+  .verdict button.off.on{background:#3a3f47;border-color:#3a3f47;color:#fff}
+
+  /* summary compare table */
+  .scroll{overflow-x:auto}
+  table.cmp{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:6px}
+  table.cmp th{background:var(--dark-blue);color:#fff;text-align:left;padding:8px 8px;position:sticky;top:0;font-size:11.5px;white-space:nowrap}
+  table.cmp td{padding:7px 8px;border-bottom:1px solid #eef1f5}
+  table.cmp td.nm{font-weight:700;white-space:nowrap}
+
+  /* checklist */
+  ul.checks{list-style:none;margin:4px 0}
+  ul.checks li{display:flex;gap:9px;padding:7px 2px;border-bottom:1px dashed #e6ebf1;align-items:flex-start;font-size:13.5px}
+  ul.checks li:last-child{border-bottom:none}
+  ul.checks input{margin-top:3px;width:16px;height:16px;flex:none;accent-color:var(--mid-blue);cursor:pointer}
+  ul.checks li.done label{text-decoration:line-through;color:var(--muted)}
+  ul.qs{margin:6px 0 6px 20px;font-size:13px} ul.qs li{margin:5px 0}
+  .grp{font-weight:800;color:var(--dark-blue);margin:14px 0 4px;font-size:14px}
+
+  footer{margin-top:32px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);padding-top:14px}
+  .src{font-size:12px;color:var(--muted)}
+  .src a{font-weight:600}
+
+  @media print{
+    body{background:#fff}
+    .tabs,.toolbar,.backbar,#todayline,.startnow{display:none!important}
+    .panel{display:block!important}
+    .school,.card{break-inside:avoid;box-shadow:none}
+    header.hero{background:var(--dark-blue)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div id="todayline"></div>
+    <h1>Gwyn, College Visit Planner</h1>
+    <div class="sub">Plan, register, score, and debrief every campus visit. Your inputs save in this browser.</div>
+    <div class="chips">
+      <span class="chip">Home visit window: <b>Aug 22–31</b> (preseason starts 9/2)</span>
+      <span class="chip">Rule: <b>no more than 2 campuses a day</b></span>
+      <span class="chip">Benchmark: <b>Bowdoin</b> (ED target)</span>
+      <span class="chip">Links verified <b>6/21</b> · plan updated <b>8/1</b></span>
+    </div>
+  </header>
+
+  <div class="backbar">
+    <a href="index.html">← Back to the Dashboard</a>
+    <a href="index.html">📅 Summer 2026 schedule (week by week)</a>
+    <a href="index.html">🧭 Resources &amp; Guide</a>
+  </div>
+
+  <div class="startnow">
+    <div class="k">START HERE, ONE THING (UPDATED AUG 1)</div>
+    <div class="t" id="startThing">Book Gwyn's Bowdoin on-campus interview for Wednesday Aug 5 (or Thursday Aug 6), tonight.</div>
+    <div class="d">Checked live on 8/1: Wed 8/5 has 9am/10am/1pm/2pm/3pm open; Thu 8/6 has 9am/10am/1pm/2pm. The on-campus calendar shows <b>nothing after Aug 21</b>, and Sept&ndash;Nov (virtual) isn't posted yet, so this week is the clean shot for the ED school. Book at <a href="https://admissions.bowdoin.edu/portal/on-campus-interview" target="_blank">admissions.bowdoin.edu/portal/on-campus-interview</a>. The full day-by-day is in the <a href="index.html">August plan</a>.</div>
+  </div>
+
+  <div class="tabs">
+    <button data-p="plan" class="active">① Plan &amp; Route</button>
+    <button data-p="rubric">② Visit Rubric</button>
+    <button data-p="day">③ Visit-Day Checklist</button>
+    <button data-p="debrief">④ Debrief Notes</button>
+    <button data-p="best">⑤ Best Practices &amp; Sources</button>
+  </div>
+
+  <!-- ============ PLAN & ROUTE ============ -->
+  <section id="plan" class="panel active">
+    <h2 class="sec">Plan &amp; route</h2>
+    <div class="lead">Schools are grouped into realistic driving clusters from Boston. Each card has the school's <b>official</b> visit page, the register/schedule link, the interview policy, and any dated summer visit days. Set a <b>priority</b>, <b>status</b>, <b>planned date</b>, and <b>owner / next action</b> for each, they save automatically.</div>
+
+    <div class="statbar" id="statbar"></div>
+
+    <div class="toolbar">
+      <button class="tbtn" id="onlyHigh">Show high-priority only</button>
+      <button class="tbtn" id="showAll">Show all</button>
+      <button class="tbtn" id="dl">⬇ Save my notes (backup file)</button>
+      <button class="tbtn" id="print">🖨 Print this page</button>
+    </div>
+
+    <div class="info"><b>How to read the clusters.</b> A is easy day trips (no hotel). B–H are drives that usually mean one or two nights. Pair at most two campuses in a day. The fly-to schools (I) are geography decisions first, do their virtual tours before booking any flight. For your <b>ED target Bowdoin</b>, a <b>fall</b> return visit with an evaluative interview beats a summer drive-by, so it sits in the Maine cluster flagged for fall. A ★ marks an <b>evaluative</b> interview (it becomes part of the application, worth prioritizing).</div>
+
+    <div id="clusters"></div>
+  </section>
+
+  <!-- ============ RUBRIC ============ -->
+  <section id="rubric" class="panel">
+    <h2 class="sec">Visit rubric</h2>
+    <div class="lead">Score each school 1 (poor) to 5 (excellent) on the things that actually matter for Gwyn. Fill it out the evening of the visit. Scores save per school; the comparison table at the bottom lines them all up.</div>
+    <div class="pick">
+      <label for="rubPick" style="font-weight:700">School:</label>
+      <select id="rubPick"></select>
+      <button class="tbtn" id="rubPrint">🖨 Print</button>
+    </div>
+    <div class="card" id="rubCard"></div>
+
+    <h3 class="cl" style="margin-top:22px">All scored schools, side by side</h3>
+    <div class="cl-note">Totals out of 50 (ten criteria). The "Bowdoin parallel" column is the single best gut-check: how close did it feel to the place that set the standard?</div>
+    <div class="scroll"><table class="cmp" id="cmpTbl"></table></div>
+  </section>
+
+  <!-- ============ VISIT-DAY CHECKLIST ============ -->
+  <section id="day" class="panel">
+    <h2 class="sec">Visit-day checklist</h2>
+    <div class="lead">Same checklist for every visit. The official tour is the floor, not the ceiling, the real signal comes from the unscripted parts. Checkboxes save in this browser; print a fresh copy per school if you prefer paper.</div>
+    <div class="toolbar"><button class="tbtn" id="dayPrint">🖨 Print checklist</button><button class="tbtn warn" id="dayReset">↺ Reset checklist</button></div>
+
+    <div class="card">
+      <div class="grp">Before you go</div>
+      <ul class="checks" data-grp="before"></ul>
+      <div class="grp">During, the official part</div>
+      <ul class="checks" data-grp="during1"></ul>
+      <div class="grp">During, beyond the tour (this is where the truth is)</div>
+      <ul class="checks" data-grp="during2"></ul>
+      <div class="grp">Right after (same day)</div>
+      <ul class="checks" data-grp="after"></ul>
+    </div>
+
+    <div class="card">
+      <div class="grp">Questions worth asking</div>
+      <p class="src">Pick a few per visit. Ask students more than the tour guide, guides are selected to be positive.</p>
+      <div class="grp" style="font-size:13px;color:var(--mid-blue)">Ask current students</div>
+      <ul class="qs" id="qStu"></ul>
+      <div class="grp" style="font-size:13px;color:var(--mid-blue)">Ask in the info session / admissions</div>
+      <ul class="qs" id="qAdm"></ul>
+      <div class="grp" style="font-size:13px;color:var(--mid-blue)">Ask a professor or department, if you can</div>
+      <ul class="qs" id="qDep"></ul>
+    </div>
+  </section>
+
+  <!-- ============ DEBRIEF ============ -->
+  <section id="debrief" class="panel">
+    <h2 class="sec">Post-visit debrief</h2>
+    <div class="lead">Fill this out the <b>same day</b>, before impressions blur and before the next campus overwrites them. Saves per school.</div>
+    <div class="pick">
+      <label for="debPick" style="font-weight:700">School:</label>
+      <select id="debPick"></select>
+      <button class="tbtn" id="debPrint">🖨 Print</button>
+    </div>
+    <div class="card" id="debCard"></div>
+  </section>
+
+  <!-- ============ BEST PRACTICES ============ -->
+  <section id="best" class="panel">
+    <h2 class="sec">Best practices &amp; sources</h2>
+
+    <div class="card">
+      <div class="grp">The short version</div>
+      <ul class="qs">
+        <li><b>Register ahead.</b> Almost every school requires pre-registration for the tour and info session; walk-ins are hit or miss. Book at least a week or two out.</li>
+        <li><b>Build in unstructured time.</b> Plan to stay on campus after the tour: eat in a dining hall, sit in the student center, walk the town. The official tour is a sales pitch; the leftover hour is the data.</li>
+        <li><b>Talk to real students</b> who are not the tour guide. Two short conversations tell you more about warmth and vibe than the whole tour.</li>
+        <li><b>Read the walls.</b> Bulletin boards, the student newspaper, and flyers show what the community actually cares about and argues about.</li>
+        <li><b>Do the interview where it counts.</b> Where a school offers an <b>evaluative</b> interview (★ on the Plan tab: Bowdoin, Tufts, Swarthmore, Macalester, Hamilton), schedule it, it becomes part of the application. "Recommended/optional" ones are still good practice and demonstrated interest.</li>
+        <li><b>Debrief the same day.</b> Memories of three campuses blur into one by the weekend. Use the Debrief tab before you drive home.</li>
+        <li><b>Two campuses a day, maximum.</b> More than that and they stop being distinguishable.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="grp">Demonstrated interest, the touchpoints that can carry weight</div>
+      <p class="src">From the counselor's June letter. Some schools track this; many top LACs say they do not (Amherst and Swarthmore explicitly do not). It still helps fit and gives you essay material.</p>
+      <ul class="qs">
+        <li>Applying binding <b>Early Decision</b>, the strongest signal (for Gwyn, that is Bowdoin)</li>
+        <li>Campus visit, in person or virtual</li>
+        <li>Interview, if offered</li>
+        <li>Opening and reading the college's emails (yes, some track opens)</li>
+        <li>Attending a college fair and stopping at the table; attending a rep's visit to Nobles in the fall; a regional info session</li>
+        <li>Thoughtfully completing all essays, even the "optional" ones</li>
+        <li>Contact with your Nobles admission representative</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="grp">Common App essay, for the summer (2026-2027 cycle)</div>
+      <p class="src">The Common App opens August 1. The personal essay is <b>650 words</b> max, and the seven prompts are unchanged from last year. Gwyn's through-line: <b>bridge-building and community engagement</b> (student council and VP, the move from a city public school into Nobles, the Rwanda trip). Prompts 1, 5, and 7 fit that spine most naturally.</p>
+      <ol class="qs" style="margin-left:24px">
+        <li>Some students have a background, identity, interest, or talent that is so meaningful they believe their application would be incomplete without it. If this sounds like you, then please share your story.</li>
+        <li>The lessons we take from obstacles we encounter can be fundamental to later success. Recount a time when you faced a challenge, setback, or failure. How did it affect you, and what did you learn from the experience?</li>
+        <li>Reflect on a time when you questioned or challenged a belief or idea. What prompted your thinking? What was the outcome?</li>
+        <li>Reflect on something that someone has done for you that has made you happy or thankful in a surprising way. How has this gratitude affected or motivated you?</li>
+        <li>Discuss an accomplishment, event, or realization that sparked a period of personal growth and a new understanding of yourself or others.</li>
+        <li>Describe a topic, idea, or concept you find so engaging that it makes you lose all track of time. Why does it captivate you? What or who do you turn to when you want to learn more?</li>
+        <li>Share an essay on any topic of your choice. It can be one you've already written, one that responds to a different prompt, or one of your own design.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="grp">Sources &amp; honest caveats</div>
+      <p class="src">Visit pages, interview policies, and dated summer events below were pulled from each school's <b>own admissions site</b> on <b>June 21, 2026</b>. Live scheduling calendars are loaded by JavaScript, so exact open dates and Saturday slots need a human to confirm in a browser, treat dated events as "verify when you book."</p>
+      <ul class="qs">
+        <li>Campus-visit best practices: <a href="https://www.nacacnet.org/the-college-visit/" target="_blank">NACAC, The College Visit</a> and <a href="https://bigfuture.collegeboard.org/plan-for-college/find-your-fit/campus-visits-and-tours" target="_blank">College Board BigFuture, Campus Visits &amp; Tours</a>.</li>
+        <li>Common App prompts and timeline: <a href="https://www.commonapp.org/apply/essay-prompts" target="_blank">commonapp.org/apply/essay-prompts</a> (2026-2027 prompts, retrieved 6/21/2026).</li>
+        <li>Per-school visit / interview / virtual-tour links: each school's official admissions pages (the buttons on the Plan tab link straight to them).</li>
+        <li>Net-price calculators, deadlines, and aid policies live in the <a href="index.html">Resources &amp; Guide</a>, not duplicated here.</li>
+      </ul>
+      <p class="src" style="margin-top:8px"><b>Two interview items flagged uncertain</b> (confirm directly): <b>Brandeis</b> domestic-applicant interviews (the live page scopes them to invited international students; older info mentioned alumni interviews), and <b>Hamilton</b> interview timing for the fall-2027 cycle (registration window not confirmed for summer, likely opens later, do not count on a summer interview there). <b>Macalester, Carleton, Pomona, Davidson</b> interview details came from search rather than a clean page fetch.</p>
+    </div>
+  </section>
+
+  <footer id="foot"></footer>
+</div>
+
+<script>
+/* ============================ DATA ============================ */
+/* intv: short interview text. evalv: true = evaluative (counts). when: summer|fall|postapp|none */
+const SCHOOLS=[
+ // ---- Cluster A: easy day trips (<=1 hr) ----
+ {k:"tufts",name:"Tufts",cat:"match",tier:"Match",cns:"Not on counselor list",geo:"Medford/Somerville, MA",hrs:0.25,cl:"A",vis:0,
+  visit:"https://admissions.tufts.edu/visit/plan-your-visit/",reg:"https://ugrad.admissions.tufts.edu/portal/campus-visit",virt:"https://admissions.tufts.edu/visit/plan-your-visit/tufts-virtual-visit/",npc:"https://students.tufts.edu/financial-services/undergrad-aid/prospectiveadmitted-students/financial-aid-calculators",
+  intv:"Optional evaluative interview (alumni/senior-student, usually virtual); request via the applicant portal after you apply.",evalv:1,when:"postapp",
+  summer:"Tours + info sessions running; bookable through ~Aug 27. Arrival at Eaton Hall; office 8:30–4:30 M–F."},
+ {k:"brandeis",name:"Brandeis",cat:"match",tier:"Match",cns:"Possible",geo:"Waltham, MA",hrs:0.3,cl:"A",vis:0,
+  visit:"https://www.brandeis.edu/admissions/visit/",reg:"https://admissions.brandeis.edu/portal/visit_brandeis",virt:"https://www.brandeis.edu/admissions/common/tour.html",npc:"https://affordability.brandeis.edu/",
+  intv:"Limited optional virtual interview, mostly invited international rising seniors. Domestic availability unclear, confirm with admissions.",evalv:0,when:"fall",
+  summer:"MISSED 7/11 visit, rebook. Best slots now: a weekday in the Aug 22–31 window (it is 20 min from home). Tours Mon–Fri + select Saturdays; walk-ins welcome."},
+ {k:"clark",name:"Clark University",cat:"safety",tier:"Safety",cns:"Likely",geo:"Worcester, MA",hrs:1.0,cl:"A",vis:1,visTxt:"Visited 7/11, good safety fit",
+  visit:"https://www.clarku.edu/undergraduate-admissions/visit/",reg:"https://apply.clarku.edu/portal/campus_visit_registration",virt:"https://www.youvisit.com/tour/clarku",npc:"https://www.clarku.edu/financial-aid/calculators/net-price/",
+  intv:"Interview strongly encouraged (not required); on-campus, virtual, or off-campus; ~20 min; open to rising seniors now. Good low-stakes practice; can be done virtually.",evalv:0,when:"summer",
+  summer:"VISITED 7/11, felt like a good safety fit. Plan: apply Early Action (nonbinding, Nov 1), fill the rubric/debrief if not done, and consider a virtual practice interview. Fall Open House Sept 19 & Oct 25."},
+ {k:"brown",name:"Brown",cat:"reach",tier:"Reach",cns:"Suggested (consider)",geo:"Providence, RI",hrs:1.0,cl:"A",vis:0,
+  visit:"https://admission.brown.edu/visit",reg:"https://admission.brown.edu/visit/campus-tours-and-information-sessions",virt:"https://admission.brown.edu/visit/virtual-information-session",npc:"https://npc.collegeboard.org/student/app/brown",
+  intv:"No interview (Brown stopped alumni interviews). Optional ~90-second video introduction instead.",evalv:0,when:"none",
+  summer:"Tours + info sessions most weekdays; pre-register (max 3 visitors). Welcome Center, 21 Prospect St, M–F 8–4. Confirm summer/Saturday availability on the scheduler."},
+
+ // ---- Cluster B: Connecticut ----
+ {k:"wesleyan",name:"Wesleyan",cat:"match",tier:"Match",cns:"Reach",geo:"Middletown, CT",hrs:2.0,cl:"B",vis:0,
+  visit:"https://www.wesleyan.edu/visit/",reg:"https://admission.wesleyan.edu/portal/campusvisit",virt:"https://admission.wesleyan.edu/portal/campusvisit",npc:"https://www.wesleyan.edu/admission/afford-aid/mit-calculator.html",
+  intv:"No evaluative interview (verified 8/1); WesChats are explicitly non-evaluative and Wesleyan says it does not factor demonstrated interest. Accepts optional InitialView/Vericant.",evalv:0,when:"none",
+  summer:"PLAN: pair with Connecticut College on a CT day in the Aug 22–31 window. Tours weekdays 9am & 1pm, weekends 12pm; pre-register (schedules may vary in late Aug). Fall Open Houses Oct 5 & 19 as backstop."},
+ {k:"conncoll",name:"Connecticut College",cat:"likely",tier:"Lower match / Likely",cns:"Likely",geo:"New London, CT",hrs:2.0,cl:"B",vis:0,
+  visit:"https://www.conncoll.edu/admission/visits-virtuals-and-events/",reg:"https://admission.conncoll.edu/portal/campus-visit",virt:"https://admission.conncoll.edu/portal/campus-visit",npc:"https://www.conncoll.edu/financial-aid/",
+  intv:"Interview optional but highly recommended; in person on campus or online; ~30 min; window is April to mid-December (verified 8/1), so an in-person interview fits the Aug 22–31 home window.",evalv:0,when:"summer",
+  summer:"PLAN: pair with Wesleyan on a CT day in the Aug 22–31 window; book the tour AND the interview together. Tours Mon–Fri + select Saturdays (75 min, includes a residence hall + dining hall)."},
+
+ // ---- Cluster C: Hudson Valley ----
+ {k:"vassar",name:"Vassar",cat:"match",tier:"Match",cns:"Reach",geo:"Poughkeepsie, NY",hrs:3.5,cl:"C",vis:0,
+  visit:"https://www.vassar.edu/admission/visit/",reg:"https://apply.vassar.edu/portal/campusvisitcalendar",virt:"https://www.vassar.edu/admission/visit/on-demand/",npc:"https://www.vassar.edu/admission/financial-aid/",
+  intv:"Interview optional + informational (not evaluative), domestic first-years only, requested AFTER applying via the portal; runs Oct–early March. No summer interviews, so the Aug 7 stop is tour + info session only, which is the right ask.",evalv:0,when:"fall",
+  summer:"BOOKED PLAN: Fri Aug 7 en route to Chautauqua. Calendar checked 8/1: Aug 7 shows available (30-min info session + 70-min tour; pick the early-afternoon session ~2pm when registering). Leave Boston by ~9:30am for a 1pm arrival buffer."},
+
+ // ---- Cluster D: Saratoga & Capital NY ----
+ {k:"skidmore",name:"Skidmore",cat:"likely",tier:"Lower match / Likely",cns:"Likely",geo:"Saratoga Springs, NY",hrs:3.0,cl:"D",vis:0,
+  visit:"https://www.skidmore.edu/admissions/visit.php",reg:"https://admissions.skidmore.edu/portal/visit",virt:"https://map.concept3d.com/?id=1090",npc:"https://www.skidmore.edu/admissions/aid/calculators.php",
+  intv:"No interview (Skidmore discontinued admissions interviews as of Fall 2024). Connect through events instead.",evalv:0,when:"none",
+  summer:"Tours most weekdays + select Saturdays, AM & PM; pre-register. Summer Open House July 25, 2026. Saratoga Springs itself is the thing to feel."},
+ {k:"union",name:"Union College",cat:"likely",tier:"Likely (counselor add)",cns:"Likely",geo:"Schenectady, NY",hrs:3.0,cl:"D",vis:0,
+  visit:"https://www.union.edu/admissions/visit",reg:"https://connect.union.edu",virt:"https://www.union.edu/admissions/virtual-tour",npc:"https://www.union.edu/financial-aid-family-financing/net-price-calculator",
+  intv:"Interview encouraged + optional; on-campus and alumni interviews; appointments start June 1, so summer interviews are available.",evalv:0,when:"summer",
+  summer:"Summer Visit Days July 17, Aug 7, Aug 21. Interviews from June 1. Note: house-based Greek life is socially dominant here, worth testing on a visit."},
+
+ // ---- Cluster E: Central/Western NY (farther) ----
+ {k:"hamilton",name:"Hamilton",cat:"match",tier:"High match / reach-leaning",cns:"Possible",geo:"Clinton, NY",hrs:4.5,cl:"E",vis:0,
+  visit:"https://www.hamilton.edu/admission/visiting/options",reg:"https://admission.hamilton.edu/portal/eventregistration",virt:"https://www.hamilton.edu/admission/virtual-tour",npc:"https://www.hamilton.edu/admission/finaid/estimate-your-financial-aid",
+  intv:"Interview strongly encouraged (not required), used in admission decisions; VIDEO interviews bookable NOW on most weekdays (deadline for ED I: Nov 19). Limited on-campus interviews in fall only. Schedule: admission.hamilton.edu/portal/eventregistration.",evalv:1,when:"summer",
+  summer:"BOOKED PLAN: Sat Aug 8 en route (calendar checked 8/1: Aug 8 shows available). Overnight near Binghamton after Vassar, ~1.25h up in the morning, visit, then ~4h on to Chautauqua. Resolves the Clinton isolation + Greek questions. Book the video interview separately for late Aug."},
+ {k:"hws",name:"Hobart & William Smith",cat:"likely",tier:"Likely (counselor add)",cns:"Likely",geo:"Geneva, NY",hrs:6.0,cl:"E",vis:0,
+  visit:"https://www.hws.edu/admissions/visit/default.aspx",reg:"https://apply.hws.edu/portal/visit",virt:"https://www.hws.edu/admissions/virtual-visit.aspx",npc:"https://www.hws.edu/admissions/tuition-scholarships-and-aid/financial-aid-calculators.aspx",
+  intv:"Interview recommended (not required); in person or virtual; informational one-on-one.",evalv:0,when:"summer",
+  summer:"Tours weekdays 10am & 2pm, Saturdays 10:30am. “Enhanced Saturday Visits” (faculty-led) start July 11. Aid is weak here, run the NPC before investing a 6-hour drive."},
+
+ // ---- Cluster F: Western Mass & Vermont ----
+ {k:"umass",name:"UMass Amherst (Honors)",cat:"safety",tier:"Safety · Honors",cns:"Not on counselor list",geo:"Amherst, MA",hrs:1.75,cl:"F",vis:0,
+  visit:"https://www.umass.edu/admissions/visit",reg:"https://yes.umass.edu/portal/visits",virt:"https://www.umass.edu/admissions/virtual-tour",npc:"https://www.umass.edu/net_price_calculator/",
+  intv:"No admissions interview (large public).",evalv:0,when:"none",
+  summer:"Book the general tour AND the separate Commonwealth Honors College info session (small group, capped at 3): honors visit page umass.edu/honors/visit, portal yes.umass.edu/portal/VisitCHC, 413-545-2483. The general tour is not honors-specific."},
+ {k:"amherst",name:"Amherst",cat:"reach",tier:"Reach · tentative",cns:"Far Reach",geo:"Amherst, MA",hrs:1.75,cl:"F",vis:1,visTxt:"Visited, lukewarm",
+  visit:"https://www.amherst.edu/admission/visit",reg:"https://admission.amherst.edu/portal/campusvisit",virt:"https://www.amherst.edu/admission/visit/virtual-tour",npc:"https://www.amherst.edu/offices/financialaid/calculator",
+  intv:"No interview; Amherst does not weigh demonstrated interest.",evalv:0,when:"none",
+  summer:"Already visited (felt short on warmth). No need to re-drive unless pairing it with the UMass Honors session on the same western trip to settle the keep/drop call."},
+ {k:"williams",name:"Williams",cat:"reach",tier:"Reach",cns:"Far Reach",geo:"Williamstown, MA",hrs:3.0,cl:"F",vis:0,
+  visit:"https://www.williams.edu/admission-aid/visit/",reg:"https://myadmission.williams.edu/portal/allcampusvisit",virt:"https://www.williams.edu/admission-aid/virtual-programming/",npc:"https://www.williams.edu/sfs/financial-aid-calculator/",
+  intv:"No interview; holistic review without one.",evalv:0,when:"none",
+  summer:"VERIFIED 8/1: Aug 9–Sep 3 tours are reduced format, 45 min, OUTDOOR ONLY, capped 12–15, pre-registration mandatory; full tours resume Sep 13. Given the compressed calendar, do the virtual tour now and only drive if Williams survives the list cut."},
+ {k:"middlebury",name:"Middlebury",cat:"match",tier:"Match",cns:"Far Reach",geo:"Middlebury, VT",hrs:3.5,cl:"F",vis:0,
+  visit:"https://www.middlebury.edu/college/admissions/campus-and-virtual-visits",reg:"https://admissions.middlebury.edu/portal/visitus",virt:"https://map.middlebury.edu/",npc:"https://npc.collegeboard.org/app/middlebury",
+  intv:"Optional alumni interview after you apply (video/phone, via the portal); not guaranteed, absence doesn't hurt you.",evalv:0,when:"postapp",
+  summer:"Tours each weekday AM & PM; pre-register. NOT offered during academic breaks (summer term is fine). Pairs with Williams (~1.5h apart) on a western/VT loop."},
+
+ // ---- Cluster G: Maine (revisit + ED) ----
+ {k:"bowdoin",name:"Bowdoin",cat:"reach",tier:"Reach · ED target",cns:"Far Reach",geo:"Brunswick, ME",hrs:2.0,cl:"G",vis:1,visTxt:"Visited, loved it",
+  visit:"https://www.bowdoin.edu/admissions/visit/index.html",reg:"https://admissions.bowdoin.edu/portal/campus-visit",virt:"https://www.bowdoin.edu/admissions/visit/virtual-tour/index.html",npc:"https://www.bowdoin.edu/student-aid/estimate-aid/",
+  intv:"Evaluative interview (on-campus or virtual Zoom, ~30 min); all formats count equally. CHECKED LIVE 8/1: on-campus + virtual slots run only through Aug 21, then nothing until the Sept–Nov schedule posts. With preseason starting 9/2, book the on-campus slot for Wed 8/5 or Thu 8/6 (both had morning + afternoon openings on 8/1).",evalv:1,when:"summer",
+  summer:"THE week-of move: day-trip to Brunswick Wed 8/5 or Thu 8/6 for the interview (2h each way, 30 min interview; lunch in town, home by dinner). Fallback: virtual Zoom slot from Chautauqua Aug 10–14. Interview portal: admissions.bowdoin.edu/portal/on-campus-interview."},
+ {k:"bates",name:"Bates",cat:"likely",tier:"Lower match / Likely",cns:"Reach",geo:"Lewiston, ME",hrs:2.25,cl:"G",vis:1,visTxt:"Visited, liked it",
+  visit:"https://www.bates.edu/admission/campus-visits/",reg:"https://apply.bates.edu/portal/campus-visit_vNew",virt:"https://www.bates.edu/admission/virtual-tour/",npc:"https://www.bates.edu/financial-services/costs-financial-aid/financial-aid-estimator",
+  intv:"No evaluative interview; optional, informational “Alumni Conversations” (virtual or in person).",evalv:0,when:"summer",
+  summer:"Summer Visit Days Fri July 10, July 24, Aug 7 (Commons meal 11am or 1pm). Already a warm visit, only re-go if you want to re-rank it next to Bowdoin and Colby."},
+ {k:"colby",name:"Colby",cat:"match",tier:"High match / reach-leaning",cns:"Not on counselor list",geo:"Waterville, ME",hrs:3.0,cl:"G",vis:1,visTxt:"Visited, liked it",
+  visit:"https://admissions.colby.edu/portal/campus-visit",reg:"https://admissions.colby.edu/portal/campus-tour",virt:"https://admissions.colby.edu/portal/campus-visit",npc:"https://afa.colby.edu/cost-and-aid/calculate-your-costs/",
+  intv:"No interview. Class visits available during the semester (fall) if you want a deeper look.",evalv:0,when:"none",
+  summer:"Already visited (liked it). Decide whether to keep it (it is not on the counselor's Naviance list). A fall class visit is the way to go deeper if it stays on."},
+
+ // ---- Cluster H: Philadelphia & Central PA ----
+ {k:"swarthmore",name:"Swarthmore",cat:"reach",tier:"Reach · legacy",cns:"Far Reach",geo:"Swarthmore, PA",hrs:5.5,cl:"H",vis:0,
+  visit:"https://www.swarthmore.edu/admissions-aid/campus-tours-and-virtual-visits",reg:"https://apply.swarthmore.edu/portal/campus_visit",virt:"https://apply.swarthmore.edu/portal/virtual_admissions_tours",npc:"https://www.swarthmore.edu/financial-aid/net-price-calculator",
+  intv:"Evaluative interview, optional; 20–30 min with a student Admissions Fellow, summarized into your file. VERIFIED 8/1: summer registrations are OPEN now, virtual and on-campus (fall slots post later). Book at apply.swarthmore.edu/portal/AdmissionsInterviews.",evalv:1,when:"summer",
+  summer:"PLAN: Mon Aug 24 tour + info session (their orientation starts 8/25 and classes 8/31, so early that week is best; spaces limited, register now). Pairs with Haverford (~20 min). The interview can be virtual from home if the trip day is full. Legacy (parent) here."},
+ {k:"haverford",name:"Haverford",cat:"match",tier:"Match",cns:"Possible",geo:"Haverford, PA",hrs:5.5,cl:"H",vis:0,
+  visit:"https://www.haverford.edu/admission/visiting",reg:"https://admission.haverford.edu/portal/guided_tour_information_session",virt:"https://admission.haverford.edu/portal/virtual_events",npc:"https://www.haverford.edu/financial-aid/net-price-calculator",
+  intv:"Interview recommended (not required), all via Zoom, and OPEN NOW for fall-2027 applicants (verified 8/1); one per applicant, all formats valued equally. Book: admission.haverford.edu/portal/zoom_interview.",evalv:0,when:"summer",
+  summer:"PLAN: Tue Aug 25 tour + info session (first-years arrive 8/26, classes 8/31, so early that week; tours Mon–Fri, cap 25, register now). The Zoom interview can happen any week from home. The honor-code culture is the closest PA parallel to Bowdoin."},
+ {k:"dickinson",name:"Dickinson",cat:"likely",tier:"Likely (counselor add)",cns:"Likely",geo:"Carlisle, PA",hrs:6.5,cl:"H",vis:0,
+  visit:"https://www.dickinson.edu/info/20255/visit/1069/visit_options",reg:"https://admissions.dickinson.edu/portal/schedule_a_visit",virt:"https://www.dickinson.edu/virtualvisits",npc:"https://www.dickinson.edu/info/20081/financial_aid/1126/net_price_calculator",
+  intv:"Interview optional; in person or virtual (Zoom with your counselor).",evalv:0,when:"summer",
+  summer:"“Discover Dickinson” Summer Preview Days July 15, 22, 29 and Aug 8 (also offered virtually). Weekday tours year-round. ~2h west of Philadelphia, a possible third PA day."},
+ {k:"gettysburg",name:"Gettysburg",cat:"match",tier:"Suggestion (counselor)",cns:"Suggested (consider)",geo:"Gettysburg, PA",hrs:7.0,cl:"H",vis:0,
+  visit:"https://www.gettysburg.edu/admissions-aid/visit/campus",reg:"https://admissions.gettysburg.edu/portal/visit",virt:"https://www.gettysburg.edu/admissions-aid/virtual-tour",npc:"https://www.gettysburg.edu/admissions-aid/tuition-fees/net-price-calculator",
+  intv:"Interview highly encouraged; ~45 min with admissions staff; can be scheduled now (junior-spring through senior mid-Feb).",evalv:0,when:"summer",
+  summer:"Weekday interviews running; info sessions 30 min + optional student tour. Honest note: Greek life is dominant (~40%+), the weakest fit on the low-Greek criterion. A virtual tour may answer the question without the 7-hour drive."},
+
+ // ---- Cluster I: Fly-to (decide first) ----
+ {k:"pomona",name:"Pomona",cat:"reach",tier:"Reach · geo-contingent",cns:"Far Reach",geo:"Claremont, CA",hrs:99,cl:"I",vis:0,
+  visit:"https://admissions.pomona.edu/portal/visit-campus",reg:"https://admissions.pomona.edu/portal/visit-campus",virt:"https://www.pomona.edu/admissions/connect/virtual-connections",npc:"https://www.pomona.edu/financial-aid/cost-attendance/estimate-your-aid",
+  intv:"Interview recommended/optional; on-campus (SoCal applicants) or alumni (AAV request form) for everyone else.",evalv:0,when:"summer",
+  summer:"Geography decision first (West Coast?). Do the virtual connections, then fly only if it survives. Live scheduling calendar is up."},
+ {k:"carleton",name:"Carleton",cat:"reach",tier:"Suggestion (counselor)",cns:"Suggested (consider)",geo:"Northfield, MN",hrs:99,cl:"I",vis:0,
+  visit:"https://www.carleton.edu/admissions/visit/",reg:"https://www.admissions.carleton.edu/portal/campusvisit",virt:"https://www.youvisit.com/tour/carleton",npc:"https://www.carleton.edu/admissions/apply/afford/aid-estimators/npc/",
+  intv:"Interview optional; offered after you complete a campus visit OR a virtual tour/info session.",evalv:0,when:"summer",
+  summer:"Minnesota, so a flight. Strong culture fit on paper (kind, progressive, no Greek). Do the virtual tour, then unlock the interview from home. Pairs with Macalester (~45 min) if you do fly."},
+ {k:"macalester",name:"Macalester",cat:"match",tier:"Suggestion (counselor)",cns:"Suggested (consider)",geo:"St. Paul, MN",hrs:99,cl:"I",vis:0,
+  visit:"https://www.macalester.edu/about/visit/",reg:"https://admissions.macalester.edu/portal/visits?tab=visit",virt:"https://tour.concept3d.com/share/uOjPspHQb/stop/1",npc:"https://www.macalester.edu/financial-aid/estimate/",
+  intv:"Evaluative interview, optional; VIRTUAL only, ~30 min, becomes part of the file. VERIFIED 8/1: fall-2027 interviews OPEN Mon Aug 3, first-come first-served; booking requires portal access (submit Common App or their 5-min Preliminary App first). ED I interview deadline Nov 13.",evalv:1,when:"summer",
+  summer:"If Macalester stays on the list: do the Preliminary App, then grab an interview slot week of Aug 3 or from the Aug 22–31 window, all from home. Virtual tour instead of a flight until the geography call is made. “Meet Mac” days Oct 2 & 12."},
+ {k:"davidson",name:"Davidson",cat:"reach",tier:"Suggestion (counselor)",cns:"Suggested (consider)",geo:"Davidson, NC",hrs:99,cl:"I",vis:0,
+  visit:"https://admission.davidson.edu/visit/",reg:"https://admission.davidson.edu/register/",virt:"https://admission.davidson.edu/portal/virtual-visit",npc:"https://www.davidson.edu/admission-and-financial-aid/cost-attendance/estimate-your-costs",
+  intv:"No evaluative interview (informal student connections; international optional InitialView/Vericant).",evalv:0,when:"none",
+  summer:"North Carolina (flight). Weekday sessions 9am & 2pm; Saturdays 10am only July 11 & Aug 8; closed to visitors July 3. Best aid of the suggestions, but Greek/eating-house culture + Southern lean are the open questions."},
+];
+
+const CLUSTERS=[
+ {id:"A",name:"Easy day trips (≤1 hr, no hotel)",note:"Weekday mornings. Low effort, good for building the visit routine and demonstrated interest. Tufts + Brandeis are ~20 min apart and can be one day."},
+ {id:"B",name:"Connecticut (long day or one night)",note:"Wesleyan + Connecticut College are ~1 hr apart, a clean two-school day. Connecticut College interviews rising seniors now."},
+ {id:"C",name:"Hudson Valley",note:"Vassar. Can be tacked onto a Connecticut or upstate-NY swing (Poughkeepsie to Middletown CT ~1.25 hr). The interview here is a fall thing; summer is for feeling out Poughkeepsie."},
+ {id:"D",name:"Saratoga & Capital Region NY (one night)",note:"Skidmore + Union are ~40 min apart, an ideal pair. Anchor on Skidmore's July 25 Open House or a Union Summer Visit Day, and book a Union interview."},
+ {id:"E",name:"Central / Western NY (farther, 1–2 nights)",note:"Hamilton (Clinton) and Hobart & William Smith (Geneva) are far west. Go only if they stay serious, Hamilton to resolve isolation + Greek; HWS only after the NPC, given the weak aid."},
+ {id:"F",name:"Western Mass & Vermont (1–2 nights)",note:"A loop: UMass Amherst Honors (+ re-walk Amherst town) → Williams → Middlebury (Williams to Middlebury ~1.5 hr). Rural, intentional, Bowdoin-adjacent in feel."},
+ {id:"G",name:"Maine (revisit + the ED interview, best in fall)",note:"All three already visited. The high-value move is a FALL Bowdoin return with the evaluative interview. Re-feel Bates/Colby only if you are re-ranking them against Bowdoin."},
+ {id:"H",name:"Philadelphia & Central PA (two nights, or train/fly)",note:"Swarthmore + Haverford are ~20 min apart and both fit the Bowdoin-warm/honor-code mold, and Swarthmore's interview is evaluative. Add Dickinson (~2 hr west) for a third day. Gettysburg is nearby but the weakest fit."},
+ {id:"I",name:"Fly-to, geography decision first",note:"Pomona (CA), Carleton + Macalester (MN, ~45 min apart), Davidson (NC). Do the virtual tours before booking any flight; Macalester's evaluative interview is virtual, do it from home no matter what."},
+];
+
+const CHECK={
+ before:[
+  "Register online for the tour AND the info session (most require it); save the confirmation",
+  "Where a school offers an evaluative interview (★), book it for this trip or schedule the fall one",
+  "Skim the school's website: academics you'd explore, one or two programs, recent news",
+  "Write down 3–5 questions you actually care about (use the bank below)",
+  "Note the address, parking, and where to check in; plan to arrive ~20 min early",
+  "Block time AFTER the tour to stay on campus, don't schedule back-to-back so tightly you have to bolt",
+ ],
+ during1:[
+  "Take the official guided tour",
+  "Attend the information session",
+  "If offered, do the on-campus interview or a class visit",
+  "Pick up printed material (it's useful later, and shows what they emphasize)",
+ ],
+ during2:[
+  "Eat or get coffee somewhere students actually go (dining hall, campus cafe)",
+  "Talk to at least two current students who are NOT the tour guide",
+  "Walk through the student center and a residence hall area",
+  "Read the bulletin boards and flyers, what's being advertised, argued, protested",
+  "Find a copy of the student newspaper (print or online) and skim it",
+  "Walk into the town: is there somewhere to go on a Friday night? does it feel safe and alive?",
+  "Sit somewhere for 10 minutes and just watch: do students seem warm, included, at ease?",
+  "Note the names of anyone helpful (especially in admissions) for a thank-you note",
+ ],
+ after:[
+  "Fill out the Visit Rubric (this site, tab ②) the same day",
+  "Fill out the Debrief (tab ③) the same day, before the next campus",
+  "Send a short thank-you email to your admissions contact / interviewer",
+  "Decide: does this move UP, DOWN, or OFF the list? Update the Dashboard to-dos",
+ ],
+};
+const QS={
+ stu:[
+  "What surprised you about this place once you actually got here?",
+  "Who do students go to when they're struggling, and does it feel easy to ask?",
+  "Is it collaborative or competitive? Do people share notes, or guard them?",
+  "What do people do on a Friday or Saturday night? How big a deal is Greek life or partying?",
+  "Have you ever felt left out or like an outsider here? When?",
+  "What would you change about this school if you could?",
+  "Do professors know your name? Have you been to one's house or office hours?",
+ ],
+ adm:[
+  "For fall-2027 entry, what are the exact deadlines (ED I / ED II / Regular)?",
+  "How does first-year academic exploration work, can I sample widely before declaring?",
+  "Do you track demonstrated interest in the decision?",
+  "Is the interview evaluative, and how do I schedule one?",
+  "How does need-based aid work here, and is the published net-price calculator current?",
+  "What support exists for students bridging into a community different from home?",
+ ],
+ dep:[
+  "What does a first or second year in this department look like?",
+  "How accessible are professors outside class? Research with undergrads?",
+  "What do students in this major do after graduating?",
+  "How easy is it to combine this with another interest (double major, minor, cross-listing)?",
+ ],
+};
+
+const RUBRIC=[
+ {k:"warmth",label:"Warmth / kindness",hint:"The Bowdoin quality: do people seem genuinely kind and welcoming?"},
+ {k:"social",label:"Social scene / community",hint:"Is there a real, inclusive social life that fits her?"},
+ {k:"academic",label:"Academic fit",hint:"Humanities/social-science strength; freedom to explore early."},
+ {k:"vibe",label:"Student vibe",hint:"Are these her people? Could she picture her friends here?"},
+ {k:"housing",label:"Housing / residential feel",hint:"Dorms, residential life, does it feel like a community or a commuter lot?"},
+ {k:"town",label:"Town / location",hint:"Is the surrounding town somewhere she'd be happy for four years?"},
+ {k:"values",label:"Values alignment",hint:"Progressive / engaged, authentic equity and world engagement."},
+ {k:"greek",label:"Greek / party culture (5 = low concern)",hint:"5 = no dominant Greek/party culture; 1 = it dominates and worries her."},
+ {k:"aid",label:"Financial-aid clarity",hint:"Did the NPC / answers make the real cost feel workable?"},
+ {k:"bowdoin",label:"Bowdoin parallel?",hint:"5 = felt as good as or better than Bowdoin; 1 = nowhere close."},
+];
+
+/* ============================ STATE ============================ */
+const LS="gwyn_visit_planner_v1";
+let DB=JSON.parse(localStorage.getItem(LS)||"{}");
+if(!DB.schools)DB.schools={};
+if(!DB.checklist)DB.checklist={};
+function S(k){if(!DB.schools[k])DB.schools[k]={priority:"",status:"",date:"",owner:"",action:"",rubric:{},verdict:"",debrief:{}};return DB.schools[k];}
+function save(){localStorage.setItem(LS,JSON.stringify(DB));}
+const $=s=>document.querySelector(s), $$=s=>document.querySelectorAll(s);
+const byk=k=>SCHOOLS.find(s=>s.k===k);
+const esc=t=>(""+t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+
+document.getElementById("todayline").textContent="Today: "+new Date().toLocaleDateString(undefined,{weekday:"short",month:"long",day:"numeric",year:"numeric"});
+document.getElementById("foot").innerHTML="Built June 21, 2026 as the visit layer for the College Search workspace. Visit/interview facts pulled from each school's official admissions pages on 6/21/2026; live scheduling calendars need a browser to confirm exact dates. A planning tool, not an admissions prediction. Net-price, deadlines, and aid policy live in the <a href=\"Resources_and_Guide.html\">Resources &amp; Guide</a>.";
+
+/* ============================ TABS ============================ */
+$$(".tabs button").forEach(b=>b.onclick=()=>{
+  $$(".tabs button").forEach(x=>x.classList.remove("active"));
+  $$(".panel").forEach(x=>x.classList.remove("active"));
+  b.classList.add("active");
+  document.getElementById(b.dataset.p).classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+/* ============================ PLAN & ROUTE ============================ */
+function distTxt(s){return s.hrs===99?"✈ flight":(s.hrs<1?"~"+Math.round(s.hrs*60)+" min":"~"+s.hrs+" hr")+" from Boston";}
+function tierClass(c){return "t-"+c;}
+function whenLabel(s){
+  if(s.evalv) return '<span class="tg eval">★ evaluative interview</span>';
+  return "";
+}
+let planFilter="all";
+function renderPlan(){
+  // stats
+  const all=SCHOOLS, reg=all.filter(s=>S(s.k).status==="Registered").length,
+    visP=all.filter(s=>S(s.k).status==="Visited").length,
+    hi=all.filter(s=>S(s.k).priority==="High").length,
+    already=all.filter(s=>s.vis).length;
+  $("#statbar").innerHTML=
+    `<div class="stat"><div class="n">${all.length}</div><div class="l">schools on the list</div></div>
+     <div class="stat"><div class="n">${already}</div><div class="l">already visited</div></div>
+     <div class="stat"><div class="n">${hi}</div><div class="l">marked high priority</div></div>
+     <div class="stat"><div class="n">${reg}</div><div class="l">tour registered</div></div>
+     <div class="stat"><div class="n">${visP}</div><div class="l">marked visited here</div></div>`;
+
+  let html="";
+  CLUSTERS.forEach(c=>{
+    let kids=SCHOOLS.filter(s=>s.cl===c.id);
+    if(planFilter==="high")kids=kids.filter(s=>S(s.k).priority==="High");
+    if(!kids.length)return;
+    html+=`<h3 class="cl"><span class="badge">Cluster ${c.id}</span> ${esc(c.name)}</h3><div class="cl-note">${esc(c.note)}</div>`;
+    kids.forEach(s=>{
+      const st=S(s.k);
+      const cls=(st.priority==="High"?"high":"")+(s.vis?" visited":"");
+      const stClass=st.status==="Registered"?"st-reg":st.status==="Visited"?"st-vis":"st-no";
+      html+=`<div class="school ${cls}">
+        <div class="top"><span class="nm">${esc(s.name)}</span><span class="loc">${esc(s.geo)} · ${distTxt(s)}</span></div>
+        <div class="tags">
+          <span class="tg ${tierClass(s.cat)}">${esc(s.tier)}</span>
+          <span class="tg cns">Counselor: ${esc(s.cns)}</span>
+          ${s.vis?`<span class="tg vis">✓ ${esc(s.visTxt)}</span>`:""}
+          ${whenLabel(s)}
+        </div>
+        <div class="linkrow">
+          <a class="lkbtn lk-visit" href="${s.visit}" target="_blank">Visit page ↗</a>
+          <a class="lkbtn lk-reg" href="${s.reg}" target="_blank">Register / schedule ↗</a>
+          <a class="lkbtn lk-virt" href="${s.virt}" target="_blank">Virtual tour ↗</a>
+          <a class="lkbtn lk-npc" href="${s.npc}" target="_blank">Net price ↗</a>
+        </div>
+        <div class="meta"><b>Interview:</b> ${esc(s.intv)}</div>
+        <div class="summer ${s.when==='none'&&!/Summer|July|Aug|open|Open|tours|Tours/.test(s.summer)?'':''}">${esc(s.summer)}</div>
+        <div class="ctrls">
+          <div><label>Priority</label>
+            <select data-k="${s.k}" data-f="priority" class="${st.priority==='High'?'pr-high':''}">
+              <option value="">—</option>${["High","Medium","Later","Decide first"].map(o=>`<option ${st.priority===o?"selected":""}>${o}</option>`).join("")}
+            </select></div>
+          <div><label>Status</label>
+            <select data-k="${s.k}" data-f="status" class="${stClass}">
+              <option value="">Not started</option>${["Researching","Registered","Visited","Skipping"].map(o=>`<option ${st.status===o?"selected":""}>${o}</option>`).join("")}
+            </select></div>
+          <div><label>Planned date</label><input type="date" data-k="${s.k}" data-f="date" value="${st.date||""}"></div>
+          <div><label>Owner</label>
+            <select data-k="${s.k}" data-f="owner">
+              <option value="">—</option>${["Gwyn","Mom","Both"].map(o=>`<option ${st.owner===o?"selected":""}>${o}</option>`).join("")}
+            </select></div>
+          <div style="grid-column:1/-1"><label>Next action / note</label><input type="text" data-k="${s.k}" data-f="action" placeholder="e.g. register tour for week of July 13; ask about Greek life" value="${esc(st.action||"")}"></div>
+        </div>
+      </div>`;
+    });
+  });
+  $("#clusters").innerHTML=html;
+  $$("#clusters select,#clusters input").forEach(el=>{
+    el.onchange=()=>{const o=S(el.dataset.k);o[el.dataset.f]=el.value;save();renderPlan();};
+  });
+}
+$("#onlyHigh").onclick=()=>{planFilter="high";renderPlan();};
+$("#showAll").onclick=()=>{planFilter="all";renderPlan();};
+$("#print").onclick=()=>window.print();
+$("#dl").onclick=()=>{
+  const blob=new Blob([JSON.stringify(DB,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);
+  a.download="gwyn-visit-notes-backup.json";a.click();
+};
+
+/* ============================ RUBRIC ============================ */
+function fillPickers(){
+  const opts=SCHOOLS.map(s=>`<option value="${s.k}">${esc(s.name)} — ${esc(s.geo)}</option>`).join("");
+  $("#rubPick").innerHTML=opts;$("#debPick").innerHTML=opts;
+}
+function renderRubric(){
+  const k=$("#rubPick").value, s=byk(k), st=S(k);
+  let rows=RUBRIC.map(c=>{
+    const v=st.rubric[c.k]||0;
+    let btns="";
+    for(let i=1;i<=5;i++)btns+=`<button class="${v===i?'on':''}" data-c="${c.k}" data-v="${i}">${i}</button>`;
+    btns+=`<button class="na ${v===-1?'on':''}" data-c="${c.k}" data-v="-1" title="not applicable / didn't assess">n/a</button>`;
+    return `<tr><td class="cri">${esc(c.label)}<small>${esc(c.hint)}</small></td><td><div class="score">${btns}</div></td></tr>`;
+  }).join("");
+  const scored=RUBRIC.map(c=>st.rubric[c.k]).filter(v=>v>0);
+  const tot=scored.reduce((a,b)=>a+b,0);
+  const vb=v=>`<button class="${v} ${st.verdict===v?'on':''}" data-vd="${v}">${{up:"↑ Moves UP",same:"→ Stays",down:"↓ Moves DOWN",off:"✕ Off the list"}[v]}</button>`;
+  $("#rubCard").innerHTML=`
+    <div class="top" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline">
+      <span class="nm" style="font-size:17px;font-weight:800;color:var(--dark-blue)">${esc(s.name)}</span>
+      <span class="loc" style="color:var(--muted);font-size:12.5px">${esc(s.geo)} · Tier: ${esc(s.tier)} · Counselor: ${esc(s.cns)}</span>
+    </div>
+    <table class="rub"><tbody>${rows}</tbody></table>
+    <div class="rubtot">Total: ${tot} / 50 ${scored.length<RUBRIC.length?`<span class="src">(${scored.length}/10 scored)</span>`:""}</div>
+    <div style="margin-top:12px"><label style="font-weight:800;font-size:12px;color:var(--muted)">VERDICT</label><div class="verdict">${["up","same","down","off"].map(vb).join("")}</div></div>
+  `;
+  $$("#rubCard .score button").forEach(b=>b.onclick=()=>{
+    const c=b.dataset.c,v=+b.dataset.v;st.rubric[c]=(st.rubric[c]===v?0:v);save();renderRubric();renderCmp();
+  });
+  $$("#rubCard .verdict button").forEach(b=>b.onclick=()=>{
+    st.verdict=(st.verdict===b.dataset.vd?"":b.dataset.vd);save();renderRubric();renderCmp();
+  });
+}
+function renderCmp(){
+  const rows=SCHOOLS.map(s=>{
+    const st=S(s.k);const sc=RUBRIC.map(c=>st.rubric[c.k]).filter(v=>v>0);
+    if(!sc.length&&!st.verdict)return null;
+    const tot=sc.reduce((a,b)=>a+b,0);
+    const bw=st.rubric.bowdoin>0?st.rubric.bowdoin:(st.rubric.bowdoin===-1?"n/a":"—");
+    const wm=st.rubric.warmth>0?st.rubric.warmth:"—";
+    const vmap={up:'<span style="color:var(--good);font-weight:700">↑ up</span>',same:'<span style="color:var(--warn);font-weight:700">→ stays</span>',down:'<span style="color:var(--bad);font-weight:700">↓ down</span>',off:'<span style="color:#3a3f47;font-weight:700">✕ off</span>',"":"—"};
+    return {nm:s.name,tot,n:sc.length,bw,wm,vd:vmap[st.verdict||""],sort:tot};
+  }).filter(Boolean).sort((a,b)=>b.sort-a.sort);
+  if(!rows.length){$("#cmpTbl").innerHTML=`<tr><td style="padding:14px;color:var(--muted)">No schools scored yet. Score one on a visit and it shows up here.</td></tr>`;return;}
+  $("#cmpTbl").innerHTML=`<thead><tr><th>School</th><th>Total /50</th><th>Warmth</th><th>Bowdoin parallel</th><th>Verdict</th></tr></thead><tbody>`+
+    rows.map(r=>`<tr><td class="nm">${esc(r.nm)}</td><td><b>${r.tot}</b> ${r.n<10?`<span class="src">(${r.n}/10)</span>`:""}</td><td>${r.wm}</td><td>${r.bw}</td><td>${r.vd}</td></tr>`).join("")+`</tbody>`;
+}
+$("#rubPick").onchange=renderRubric;
+$("#rubPrint").onclick=()=>window.print();
+
+/* ============================ CHECKLIST ============================ */
+function renderChecklist(){
+  Object.keys(CHECK).forEach(grp=>{
+    const ul=document.querySelector(`ul.checks[data-grp="${grp}"]`);
+    ul.innerHTML=CHECK[grp].map((t,i)=>{
+      const id=grp+"_"+i, on=DB.checklist[id];
+      return `<li class="${on?'done':''}"><input type="checkbox" data-id="${id}" ${on?"checked":""}><label>${esc(t)}</label></li>`;
+    }).join("");
+  });
+  $$('#day input[type=checkbox]').forEach(b=>b.onchange=()=>{DB.checklist[b.dataset.id]=b.checked;save();renderChecklist();});
+  $("#qStu").innerHTML=QS.stu.map(q=>`<li>${esc(q)}</li>`).join("");
+  $("#qAdm").innerHTML=QS.adm.map(q=>`<li>${esc(q)}</li>`).join("");
+  $("#qDep").innerHTML=QS.dep.map(q=>`<li>${esc(q)}</li>`).join("");
+}
+$("#dayPrint").onclick=()=>window.print();
+$("#dayReset").onclick=()=>{if(confirm("Clear all checklist checkboxes?")){DB.checklist={};save();renderChecklist();}};
+
+/* ============================ DEBRIEF ============================ */
+const DEBF=[
+ {k:"date",label:"Visit date",type:"date"},
+ {k:"enthus",label:"Gwyn's enthusiasm, gut, 1–10 (write the number)",type:"short"},
+ {k:"warm",label:"What felt warm / kind / right?",type:"long"},
+ {k:"flags",label:"Red flags or things that felt off",type:"long"},
+ {k:"gwyn",label:"Gwyn's own words (let her talk first)",type:"long"},
+ {k:"parent",label:"Parent notes",type:"long"},
+ {k:"follow",label:"Follow-up questions to chase",type:"long"},
+];
+function renderDebrief(){
+  const k=$("#debPick").value, s=byk(k), st=S(k);
+  let fields=DEBF.map(f=>{
+    const v=st.debrief[f.k]||"";
+    if(f.type==="long")return `<div style="margin:10px 0"><label style="font-weight:800;font-size:12px;color:var(--muted)">${esc(f.label)}</label><textarea data-f="${f.k}">${esc(v)}</textarea></div>`;
+    if(f.type==="date")return `<div style="margin:10px 0"><label style="font-weight:800;font-size:12px;color:var(--muted)">${esc(f.label)}</label><br><input type="date" data-f="${f.k}" value="${v}" style="border:1px solid var(--border);border-radius:8px;padding:7px 9px;font-family:inherit"></div>`;
+    return `<div style="margin:10px 0"><label style="font-weight:800;font-size:12px;color:var(--muted)">${esc(f.label)}</label><br><input type="text" data-f="${f.k}" value="${esc(v)}" style="width:160px;border:1px solid var(--border);border-radius:8px;padding:7px 9px;font-family:inherit"></div>`;
+  }).join("");
+  const vb=v=>`<button class="${v} ${st.verdict===v?'on':''}" data-vd="${v}">${{up:"↑ Moves UP",same:"→ Stays",down:"↓ Moves DOWN",off:"✕ Off the list"}[v]}</button>`;
+  $("#debCard").innerHTML=`
+    <div class="top" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;align-items:baseline">
+      <span class="nm" style="font-size:17px;font-weight:800;color:var(--dark-blue)">${esc(s.name)}</span>
+      <span class="loc" style="color:var(--muted);font-size:12.5px">${esc(s.geo)}</span>
+    </div>
+    ${fields}
+    <div style="margin-top:6px"><label style="font-weight:800;font-size:12px;color:var(--muted)">DOES IT MOVE UP, DOWN, OR OFF?</label><div class="verdict">${["up","same","down","off"].map(vb).join("")}</div></div>
+    <p class="src" style="margin-top:8px">Tip: the same-day verdict is the one to trust. Then carry it back to the Dashboard to-dos and the rubric comparison.</p>
+  `;
+  $$("#debCard [data-f]").forEach(el=>el.oninput=()=>{st.debrief[el.dataset.f]=el.value;save();});
+  $$("#debCard .verdict button").forEach(b=>b.onclick=()=>{st.verdict=(st.verdict===b.dataset.vd?"":b.dataset.vd);save();renderDebrief();renderCmp();});
+}
+$("#debPick").onchange=renderDebrief;
+$("#debPrint").onclick=()=>window.print();
+
+/* ============================ INIT ============================ */
+fillPickers();
+renderPlan();
+renderRubric();
+renderCmp();
+renderChecklist();
+renderDebrief();
+</script>
+</body>
+</html>

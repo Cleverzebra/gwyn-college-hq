@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>Gwyn's College HQ</title>
+<style>
+  :root{--dark-blue:#1B3A5C;--mid-blue:#2E6CA4;--light-bg:#EBF2FA;--ink:#1f2733;--border:#d8dee6;--muted:#667;
+    --good:#1B8A4B;--warn:#C77700;--bad:#B71C1C;--accent:#b3541e;--accent-dark:#7a2c14;
+    --shadow:0 1px 3px rgba(20,40,70,.08),0 4px 16px rgba(20,40,70,.06);}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:#eef2f7;line-height:1.55;font-size:15px}
+  a{color:var(--mid-blue);text-decoration:none}a:hover{text-decoration:underline}
+  .wrap{max-width:980px;margin:0 auto;padding:22px 18px 70px}
+  header.hero{background:linear-gradient(135deg,var(--dark-blue),#274d75);color:#fff;border-radius:15px;padding:20px 24px;box-shadow:var(--shadow)}
+  header.hero h1{font-size:24px;font-weight:800}
+  header.hero .sub{opacity:.93;font-size:14px;margin-top:3px}
+  header.hero .chips{margin-top:12px;display:flex;flex-wrap:wrap;gap:8px}
+  .chip{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.26);padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:600}
+  .chip b{font-weight:800}
+  .backbar{margin:12px 0 4px;font-size:13.5px;font-weight:700;display:flex;gap:16px;flex-wrap:wrap}
+
+  /* TODAY */
+  .today{background:linear-gradient(135deg,#7a2c14,#b3541e);color:#fff;border-radius:15px;padding:20px 24px;margin:16px 0;box-shadow:var(--shadow)}
+  .today .k{font-size:11px;font-weight:800;letter-spacing:.7px;opacity:.9}
+  .today h2{font-size:20px;font-weight:800;margin:4px 0 6px;border:none;padding:0;color:#fff}
+  .today .task{font-size:15.5px;line-height:1.55}
+  .today .task b{font-weight:800}
+  .today .extra{font-size:13px;opacity:.93;margin-top:8px;border-top:1px solid rgba(255,255,255,.25);padding-top:8px}
+  .today .mins{display:inline-block;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 11px;font-size:12px;font-weight:800;margin-bottom:8px}
+  .today a{color:#ffe1c9;text-decoration:underline}
+  .donebox{margin-top:10px;font-size:13px;display:flex;align-items:center;gap:7px}
+  .donebox input{width:17px;height:17px;accent-color:#fff}
+
+  h2.sec{font-size:18px;color:var(--dark-blue);font-weight:800;margin:26px 0 8px;border-left:5px solid var(--accent);padding-left:11px}
+  .lead{color:var(--muted);font-size:13.3px;margin:2px 0 10px}
+  .info{background:#fbfdff;border:1px solid #cfe0f1;border-left:5px solid var(--mid-blue);border-radius:10px;padding:12px 15px;font-size:13.3px;margin:12px 0}
+  .callout{background:#fff8e1;border:1px solid #f0e2a8;border-radius:10px;padding:12px 15px;font-size:13.2px;color:#5c4d12;margin:12px 0}
+  .card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:15px 17px;box-shadow:var(--shadow);margin:12px 0}
+
+  /* week strip */
+  .strip{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:10px 0}
+  .wd{background:#fff;border:1px solid var(--border);border-radius:9px;padding:7px 6px;text-align:center;font-size:11px;color:var(--muted)}
+  .wd .dn{font-weight:800;font-size:12.5px;color:var(--dark-blue)}
+  .wd.today-cell{background:var(--accent);border-color:var(--accent-dark);color:#fff}
+  .wd.today-cell .dn{color:#fff}
+  .wd .ic2{font-size:13px}
+  @media(max-width:600px){.strip{grid-template-columns:repeat(7,1fr)}.wd{font-size:9.5px;padding:5px 2px}.wd .dn{font-size:11px}}
+
+  /* phases + days */
+  h3.phase{font-size:15px;color:var(--dark-blue);font-weight:800;margin:20px 0 4px;display:flex;gap:8px;align-items:center}
+  h3.phase .b{background:var(--mid-blue);color:#fff;border-radius:7px;font-size:10.5px;font-weight:800;padding:2px 8px}
+  .phase-note{color:var(--muted);font-size:12.5px;margin:0 0 8px}
+  .day{background:#fff;border:1px solid var(--border);border-radius:11px;box-shadow:var(--shadow);margin:8px 0;overflow:hidden}
+  .day.today-day{border:2px solid var(--accent);box-shadow:0 0 0 3px rgba(179,84,30,.12)}
+  .day.past-day{opacity:.55}
+  .day .hd{background:linear-gradient(180deg,#f9f7f5,#fff);border-bottom:1px solid #f0ece7;padding:8px 14px;display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:5px}
+  .day .hd .d{font-weight:800;color:var(--dark-blue);font-size:13.8px}
+  .day .hd .badges{display:flex;gap:6px;align-items:center}
+  .th{font-size:10.5px;font-weight:800;color:#fff;background:var(--accent);border-radius:6px;padding:2px 8px;white-space:nowrap}
+  .th.trip{background:#1d5c38}.th.quiet{background:#8a94a3}.th.gone{background:#5B3E86}
+  .mins2{font-size:10.5px;font-weight:800;color:var(--accent-dark);background:#fdf0e5;border:1px solid #ecd0b8;border-radius:6px;padding:2px 7px;white-space:nowrap}
+  .day .bd{padding:9px 14px;font-size:13.2px}
+  .day .one{font-weight:700;color:var(--dark-blue)}
+  .day .sub2{color:var(--muted);font-size:12.4px;margin-top:4px}
+  .who{display:inline-block;font-size:9.5px;font-weight:800;border-radius:5px;padding:2px 6px;margin-right:5px;vertical-align:middle}
+  .who.g{background:#EAF4EA;color:#1B5E20}
+  .who.p{background:#E7F0F8;color:#1F5C92}
+  .who.b{background:#F3F0FA;color:#4A148C}
+  .dchk{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--muted);margin-top:7px}
+  .dchk input{width:15px;height:15px;accent-color:var(--good)}
+
+  table{width:100%;border-collapse:collapse;font-size:12.6px;margin:8px 0;background:#fff}
+  th{background:var(--dark-blue);color:#fff;text-align:left;padding:8px 10px;font-size:11.5px}
+  td{padding:7px 10px;border-bottom:1px solid #eef1f5;vertical-align:top}
+  tr:nth-child(even) td{background:#fafcff}
+  td.s{font-weight:700;white-space:nowrap}
+  .scroll{overflow-x:auto}
+  .ok{color:var(--good);font-weight:700}.warn{color:var(--warn);font-weight:700}
+  .tier{display:inline-block;font-size:9.5px;font-weight:800;padding:2px 6px;border-radius:5px;white-space:nowrap}
+  .t-reach{background:#FDECEA;color:#B71C1C}.t-match{background:#EAF4EA;color:#1B5E20}
+  .t-likely{background:#FFF8E1;color:#795800}.t-safety{background:#F3F0FA;color:#4A148C}
+  .vischip{font-size:10.5px;font-weight:800;color:var(--good)}
+  details.fold{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin:12px 0;padding:0 17px}
+  details.fold summary{cursor:pointer;font-weight:800;color:var(--dark-blue);padding:13px 0;font-size:14.5px}
+  details.fold .inner{padding:2px 0 14px}
+  .lkbtn{display:inline-block;border-radius:6px;padding:3px 8px;font-size:11px;font-weight:700;white-space:nowrap;border:1px solid;margin:1px 0}
+  .lk-app{background:#eef6ff;border-color:#cfe0f1;color:#1B3A5C}
+  .lk-cds{background:#f6f2fb;border-color:#e0d4f0;color:#4A148C}
+  .lk-npc{background:#eef9f1;border-color:#cdebd6;color:#1B5E20}
+  footer{margin-top:30px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);padding-top:14px}
+  .src{font-size:12px;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>Gwyn's College HQ</h1>
+    <div class="sub">One page: what to do today, the visit calendar, the list, and every link. About <b>30–60 minutes a day</b>, except actual visit days. Nothing here is homework past an hour.</div>
+    <div class="chips">
+      <span class="chip">Today's job is always <b>the orange box</b></span>
+      <span class="chip">Drive: <b>Fri 8/7 Vassar → Sat 8/8 Hamilton</b></span>
+      <span class="chip">Home window: <b>Aug 22–31</b></span>
+      <span class="chip">Preseason: <b>Sept 2</b></span>
+    </div>
+  </header>
+
+  <div class="backbar" id="localbar">
+    
+    <a href="planner.html">🧭 Visit Planner: rubric + debrief forms</a>
+  </div>
+
+  <!-- TODAY (auto-filled by date) -->
+  <div class="today" id="todayBox">
+    <div class="k" id="tKicker">TODAY</div>
+    <h2 id="tDate">Loading…</h2>
+    <div id="tMins" class="mins"></div>
+    <div class="task" id="tTask"></div>
+    <div class="extra" id="tExtra"></div>
+    <div class="donebox"><input type="checkbox" id="tDone"><label for="tDone">Done for today</label></div>
+  </div>
+
+  <!-- THIS WEEK STRIP -->
+  <h2 class="sec">This week at a glance</h2>
+  <div class="strip" id="weekStrip"></div>
+
+  <!-- BOWDOIN ANSWER -->
+  <div class="info" id="bowdoinBox">
+    <b>The Bowdoin interview: this summer, on campus, this week.</b> Checked live on the portal 8/1: open slots <b>Wed 8/5</b> (9, 10, 1, 2, 3) and <b>Thu 8/6</b> (9, 10, 1, 2); <b>nothing offered after Aug 21</b>; the Sept–Nov schedule isn't posted yet and alumni interviews don't start until Oct 1. With preseason starting Sept 2, this week is the clean shot. Every format "counts as an official interview and becomes part of your application" (their words), and the on-campus one comes with a Brunswick lunch. Fallback: a virtual Zoom slot from Chautauqua, Aug 10–14. <a href="https://admissions.bowdoin.edu/portal/on-campus-interview" target="_blank"><b>Book here ↗</b></a>
+  </div>
+
+  <!-- DAILY CALENDAR -->
+  <h2 class="sec">The daily calendar, Aug 1 → Sept 2</h2>
+  <div class="lead">One thing a day. The little checkbox saves in this browser. GWYN = your 30–60 minutes; PARENT = Mom's item; BOTH = family/trip. Past days fade out on their own.</div>
+  <div id="calendar"></div>
+
+  <!-- BOOKING TABLE -->
+  <h2 class="sec">Visit bookings (register in this order)</h2>
+  <div class="scroll"><table>
+    <thead><tr><th>#</th><th>Visit</th><th>Date</th><th>Status checked 8/1</th><th>Register</th></tr></thead>
+    <tbody>
+      <tr><td class="s">1</td><td>Bowdoin on-campus interview</td><td class="s">Wed 8/5 (alt Thu 8/6)</td><td class="ok">Slots open (9/10/1/2/3 Wed; 9/10/1/2 Thu)</td><td><a href="https://admissions.bowdoin.edu/portal/on-campus-interview" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">2</td><td>Vassar info session + tour</td><td class="s">Fri 8/7, early PM</td><td class="ok">Day shows available; pick the ~2pm session at checkout</td><td><a href="https://apply.vassar.edu/portal/campusvisitcalendar" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">3</td><td>Hamilton campus visit</td><td class="s">Sat 8/8, morning</td><td class="ok">Day shows available</td><td><a href="https://admission.hamilton.edu/portal/eventregistration" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">4</td><td>Swarthmore tour + info</td><td class="s">Mon 8/24, morning</td><td class="warn">Runs through orientation week; spaces limited, register early</td><td><a href="https://apply.swarthmore.edu/portal/campus_visit" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">5</td><td>Haverford tour + info</td><td class="s">Tue 8/25, morning</td><td class="warn">Mon–Fri tours, cap 25; confirm the late-Aug slot</td><td><a href="https://admission.haverford.edu/portal/guided_tour_information_session" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">6</td><td>Wesleyan tour</td><td class="s">Thu 8/27, 9am</td><td class="warn">Weekday 9am/1pm published; late-Aug schedules may vary, confirm</td><td><a href="https://admission.wesleyan.edu/portal/campusvisit" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">7</td><td>Connecticut College tour + interview</td><td class="s">Thu 8/27, early PM</td><td class="ok">Interview window runs April–mid-Dec, in person or online</td><td><a href="https://admission.conncoll.edu/portal/campus-visit" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">8</td><td>Brandeis tour (rebook)</td><td class="s">Fri 8/28, morning</td><td class="warn">Confirm the date on the portal</td><td><a href="https://admissions.brandeis.edu/portal/visit_brandeis" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">9</td><td>Brown tour + info</td><td class="s">Fri 8/28, afternoon</td><td class="warn">Pre-registration required, max 3 visitors; confirm</td><td><a href="https://apply.college.brown.edu/portal/campus-visit_vNew" target="_blank">portal ↗</a></td></tr>
+      <tr><td class="s">10</td><td>Tufts tour</td><td class="s">Mon 8/3 or flex</td><td class="warn">Summer tours running; 15 min from home, lowest stakes</td><td><a href="https://ugrad.admissions.tufts.edu/portal/campus-visit" target="_blank">portal ↗</a></td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout"><b>If a slot is gone when you book:</b> the plan bends. The drive stops are droppable, the Philly pair can flip days, and the CT day can move anywhere Aug 26–28. Two campuses a day, never more.</div>
+
+  <!-- FROM HOME -->
+  <h2 class="sec">Interviews &amp; tours you can do from a couch</h2>
+  <div class="lead">These count where counting matters (★ = becomes part of your application file). All are free moves in spare 30-minute windows.</div>
+  <div class="scroll"><table>
+    <thead><tr><th>Do</th><th>School</th><th>What / when</th><th>Link</th></tr></thead>
+    <tbody>
+      <tr><td class="s">★ Interview</td><td>Swarthmore</td><td>Evaluative, with a student Admissions Fellow; summer slots open NOW, virtual or on-campus</td><td><a href="https://apply.swarthmore.edu/portal/AdmissionsInterviews" target="_blank">book ↗</a></td></tr>
+      <tr><td class="s">★ Interview</td><td>Macalester</td><td>Evaluative, virtual, opens Mon 8/3 first-come; do the 5-min Preliminary App first; interview deadline for ED I is Nov 13</td><td><a href="https://www.macalester.edu/admissions/interviews/" target="_blank">details ↗</a></td></tr>
+      <tr><td class="s">★ Interview</td><td>Hamilton</td><td>Used in decisions; video, most weekdays, bookable now; ED I deadline Nov 19</td><td><a href="https://admission.hamilton.edu/portal/eventregistration" target="_blank">book ↗</a></td></tr>
+      <tr><td class="s">Interview</td><td>Haverford</td><td>Recommended, all Zoom, open now; one per applicant, all formats valued equally</td><td><a href="https://admission.haverford.edu/portal/zoom_interview" target="_blank">book ↗</a></td></tr>
+      <tr><td class="s">★ Interview</td><td>Bowdoin (fallback only)</td><td>Virtual Zoom slots Mon 8/10–Fri 8/14 if the Wed 8/5 on-campus didn't happen</td><td><a href="https://admissions.bowdoin.edu/portal/on-campus-interview" target="_blank">book ↗</a></td></tr>
+      <tr><td class="s">Virtual tour</td><td>Williams</td><td>In-person is reduced through 9/3 (45-min, outdoor-only), so tour virtually and decide if it survives the cut</td><td><a href="https://www.williams.edu/admission-aid/virtual-programming/" target="_blank">tour ↗</a></td></tr>
+      <tr><td class="s">Virtual tour</td><td>Middlebury</td><td>Interactive map tour + Tuesday virtual info sessions; interviews only exist after applying</td><td><a href="https://map.middlebury.edu/" target="_blank">tour ↗</a></td></tr>
+      <tr><td class="s">Virtual tour</td><td>Pomona · Carleton · Davidson</td><td>The geography three: virtual verdicts due before the Aug 30 ranking session</td><td><a href="https://www.pomona.edu/admissions/connect/virtual-connections" target="_blank">Pomona ↗</a> · <a href="https://www.youvisit.com/tour/carleton" target="_blank">Carleton ↗</a> · <a href="https://admission.davidson.edu/portal/virtual-visit" target="_blank">Davidson ↗</a></td></tr>
+      <tr><td class="s">Virtual tour</td><td>Macalester</td><td>360 tour; pairs with the real evaluative interview above</td><td><a href="https://tour.concept3d.com/share/uOjPspHQb/stop/1" target="_blank">tour ↗</a></td></tr>
+    </tbody>
+  </table></div>
+
+  <!-- APPS -->
+  <h2 class="sec">Applications: Common App + supplements</h2>
+  <div class="card" style="font-size:13.4px">
+    <p><a class="lkbtn lk-app" style="font-size:13px;padding:7px 13px" href="https://apply.commonapp.org/login" target="_blank"><b>Open the Common App ↗</b></a> &nbsp; <a class="lkbtn lk-app" href="https://www.commonapp.org/apply/essay-prompts" target="_blank">2026-27 essay prompts ↗</a></p>
+    <p style="margin-top:9px">It opened Aug 1 (your account rolls over when you log in). The personal statement is <b>650 words max</b>, prompts unchanged; 1, 5, and 7 fit the bridge-building spine best.</p>
+    <p style="margin-top:9px"><b>Where the supplemental essays live:</b> add each college inside the Common App ("College Search" tab → add), and that school's extra questions and supplemental essays appear under its <b>Writing / Questions</b> section. That is the authoritative list of what each school actually requires this year, better than any external page. Add Bowdoin first; its supplement is the one to draft first.</p>
+    <p style="margin-top:9px" class="src">Every school on the list takes the Common App. UMass also takes its own application; use the Common App there too and nothing extra is needed.</p>
+  </div>
+
+  <!-- THE LIST -->
+  <details class="fold">
+    <summary>The college list (tap to open), tiers, visits, and each school's links</summary>
+    <div class="inner">
+      <div class="lead">Tier = working read · Counselor = the counselor office's Regular-Decision rating. ✓ = visited. Full sortable data, rubric, and debrief forms are in the <a href="planner.html">Visit Planner</a>.</div>
+      <div class="scroll"><table id="listTbl">
+        <thead><tr><th>School</th><th>Tier</th><th>Counselor</th><th>Visited</th><th>Links</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </div>
+  </details>
+
+  <!-- DROPPED -->
+  <details class="fold">
+    <summary>What this plan dropped on purpose (so you don't wonder)</summary>
+    <div class="inner" style="font-size:13.3px">
+      <ul style="margin:2px 0 2px 20px">
+        <li><b>Union, Skidmore, HWS in person:</b> the I-90 return leg died when the return became Sunday 8/16 (no weekend tours). All three are counselor-Likely; virtual coverage + the Aug 30 ranking decide if any earns a fall push.</li>
+        <li><b>Williams and Middlebury in person:</b> Williams is reduced-outdoor-only until 9/13 anyway; both are counselor Far Reaches; they must earn a spot on paper before they earn a drive.</li>
+        <li><b>UMass Honors session:</b> weekday-only, small group; only if UMass survives the Naviance call, maybe a September weekday.</li>
+        <li><b>Amherst re-visit:</b> the lukewarm visit stands as data; the Aug 30 session decides keep/drop without another trip.</li>
+      </ul>
+    </div>
+  </details>
+
+  <footer>
+    Rebuilt August 1, 2026 as the single front door for the August push. Dated facts were checked against each school's own admissions site or live portal on 8/1/2026 (Bowdoin interview slots, Vassar Aug 7, and Hamilton Aug 8 read directly from their calendars); "confirm" flags mark what a calendar wouldn't show. Alumni-interview and deadline details change; recheck when booking. A planning tool, not an admissions prediction.
+  </footer>
+</div>
+
+<script>
+/* ---------- DAILY DATA ---------- */
+/* who: g=Gwyn p=Parent b=Both · tag: BOOK/TRIP/DESK/REST/AWAY · mins = Gwyn's time */
+const DAYS=[
+ {d:"2026-08-01",tag:"BOOKINGS",cls:"",who:"p",mins:"15 min (Mom)",task:"<b>Three bookings tonight:</b> Bowdoin interview (Wed 8/5, pick 10am or 1pm), Vassar Fri 8/7 early-afternoon session, Hamilton Sat 8/8 morning.",extra:"Links are in the booking table below. If Vassar's ~2pm is gone, take the morning and leave Boston earlier Friday."},
+ {d:"2026-08-02",tag:"SETUP",cls:"quiet",who:"g",mins:"45 min",task:"<b>Common App setup:</b> log in at <a href='https://apply.commonapp.org/login' target='_blank'>apply.commonapp.org</a> (it rolls your account to 2026-27), fill Profile + Education, start Activities with the VP role on top.",extra:"PARENT: send the 2-minute reply to the counselor (open since June) and the note to Ms. D-L asking for her Bowdoin impressions."},
+ {d:"2026-08-03",tag:"OPTIONAL LOCAL",cls:"quiet",who:"b",mins:"0–90 min",task:"<b>Optional:</b> Tufts + Brandeis morning double (20 min apart; Brandeis was the missed 7/11 visit). Low stakes; skip freely, both refit Aug 22–31.",extra:"GWYN, 15 min tonight: Macalester interviews open today. If Mac stays under consideration, do its 5-minute Preliminary App to unlock a late-Aug interview slot."},
+ {d:"2026-08-04",tag:"DESK DAY",cls:"quiet",who:"g",mins:"45 min",task:"<b>Essay outline:</b> pick the prompt (1, 5, or 7 fit the bridge-building spine) and outline the personal statement. Skeleton only, no drafting.",extra:"PARENT: first two Net Price Calculators (Hobart & William Smith, then Bowdoin). Pack for the trip."},
+ {d:"2026-08-05",tag:"BOWDOIN DAY",cls:"trip",who:"b",mins:"day trip",task:"<b>Brunswick:</b> leave ~8am for a 10am interview (or ~11am for 1pm). 30 minutes at Burton-Little House, then lunch on Maine Street and a slow lap of the quad with the ED question in mind. Home by 5.",extra:"GWYN, 10 min tonight: two-line thank-you to the interviewer + the planner debrief: did it still feel like the place?"},
+ {d:"2026-08-06",tag:"BOSTON DINNER",cls:"quiet",who:"b",mins:"0 min",task:"<b>Light day, dinner in Boston tonight.</b> Pack the car for tomorrow's early start.",extra:"If the interview landed today instead: 9 or 10am slot, back early afternoon, dinner untouched."},
+ {d:"2026-08-07",tag:"VASSAR",cls:"trip",who:"b",mins:"drive day",task:"<b>Leave ~9:15am → Poughkeepsie ~12:45 (≈3.5 hr).</b> Info session (30 min) + student-led tour (70 min), then 20 minutes in the Arlington district by the gate: the 'is Poughkeepsie livable' test.",extra:"Then ~2 hr west to Binghamton for the night. Rubric + debrief in the car before dinner."},
+ {d:"2026-08-08",tag:"HAMILTON → LAKE",cls:"trip",who:"b",mins:"drive day",task:"<b>Binghamton → Clinton (~1.25 hr) for the morning Hamilton visit.</b> This one settles the two Hamilton questions: Clinton isolation and Greek presence, measured against Bowdoin. Lunch in the village, then ~3.75 hr to Chautauqua.",extra:"Debrief before the lake takes over. If everyone is wiped, Hamilton is the one skippable stop; its video interview still covers the relationship."},
+ {d:"2026-08-09",tag:"INSTITUTE",cls:"gone",who:"g",mins:"0 min",task:"<b>Settle in. No college work today.</b>",extra:""},
+ {d:"2026-08-10",tag:"INSTITUTE",cls:"gone",who:"g",mins:"40 min",task:"<b>Essay draft, part 1.</b> Ugly first page is the goal. (If Wednesday's Bowdoin interview didn't happen: virtual Zoom slots run this week, book one now.)",extra:"PARENT evening #1: two more NPCs; register Swarthmore 8/24 + Haverford 8/25."},
+ {d:"2026-08-11",tag:"INSTITUTE",cls:"gone",who:"g",mins:"40 min",task:"<b>Essay draft, part 2.</b> Push to a full 650-word draft, quality irrelevant.",extra:""},
+ {d:"2026-08-12",tag:"INSTITUTE",cls:"gone",who:"g",mins:"40 min",task:"<b>Essay draft, part 3:</b> read it out loud once, mark what's dead, stop.",extra:"PARENT evening #2: register the CT day (Wesleyan 9am + Conn College PM tour AND interview, Thu 8/27), Brandeis 8/28 AM, Brown 8/28 PM. Propose a counselor meeting for Aug 26–31."},
+ {d:"2026-08-13",tag:"INSTITUTE",cls:"gone",who:"g",mins:"30 min",task:"<b>Virtual tour #1: Williams</b> (their in-person tours are reduced anyway). Gut note in the planner: could you see it?",extra:""},
+ {d:"2026-08-14",tag:"INSTITUTE",cls:"gone",who:"g",mins:"30 min",task:"<b>Virtual tour #2: Middlebury.</b> Same drill: one gut note.",extra:"Last day of Bowdoin virtual-interview availability this week, if it's still pending."},
+ {d:"2026-08-15",tag:"INSTITUTE ENDS",cls:"gone",who:"g",mins:"0 min",task:"<b>Institute wraps. Nothing.</b>",extra:""},
+ {d:"2026-08-16",tag:"TRAVEL HOME",cls:"gone",who:"b",mins:"0 min",task:"<b>Drive home to Boston. Nothing else.</b>",extra:""},
+ {d:"2026-08-17",tag:"CAMP SUNSHINE",cls:"gone",who:"g",mins:"0 min",task:"<b>Camp week: zero college work.</b> This week tends to end up in essays on its own; let it be itself.",extra:"PARENT (whole week, ~30 min total): confirm the five late-Aug registrations landed; print two visit-day checklists; line up one trusted reader for the essay."},
+ {d:"2026-08-18",tag:"CAMP SUNSHINE",cls:"gone",who:"g",mins:"0 min",task:"<b>Camp.</b>",extra:""},
+ {d:"2026-08-19",tag:"CAMP SUNSHINE",cls:"gone",who:"g",mins:"0 min",task:"<b>Camp.</b>",extra:""},
+ {d:"2026-08-20",tag:"CAMP SUNSHINE",cls:"gone",who:"g",mins:"0 min",task:"<b>Camp.</b>",extra:""},
+ {d:"2026-08-21",tag:"CAMP PICKUP",cls:"gone",who:"b",mins:"0 min",task:"<b>Pickup day.</b> Default: drive home and rest.",extra:"Emergency valve only: Casco is ~40 min from Brunswick and Bowdoin's summer calendar ends today, so a swing-by exists if the interview never happened. Don't plan on it."},
+ {d:"2026-08-22",tag:"REST",cls:"quiet",who:"b",mins:"0 min",task:"<b>Recovery day.</b> Evening only: confirm the Philly hotel and Monday session times.",extra:""},
+ {d:"2026-08-23",tag:"DRIVE SOUTH",cls:"trip",who:"b",mins:"drive day",task:"<b>After lunch, ~5.5 hr to the Swarthmore/Media area.</b> Dinner down there, early night.",extra:""},
+ {d:"2026-08-24",tag:"SWARTHMORE",cls:"trip",who:"b",mins:"visit day",task:"<b>Morning info session + tour.</b> Afternoon: the Ville and the Crum Woods edge, holding the one question that matters here: Bowdoin-warm, or pressure-cooker? Overnight near Philly.",extra:"If a Swarthmore interview slot aligned today, take it; otherwise the virtual one next week counts the same. Debrief tonight."},
+ {d:"2026-08-25",tag:"HAVERFORD → HOME",cls:"trip",who:"b",mins:"visit day",task:"<b>Morning tour + info session</b> (first-years arrive tomorrow; mornings beat the bustle). Watch how students talk to each other, that's the honor-code culture showing. Then ~5.5 hr home.",extra:"Debrief both PA schools in the car: did either out-warm Bowdoin?"},
+ {d:"2026-08-26",tag:"DESK DAY",cls:"quiet",who:"g",mins:"60 min",task:"<b>Essay revision</b> with the reader's comments (45 min), plus one from-home interview if pending: Haverford Zoom, Swarthmore virtual, or Macalester.",extra:"PARENT: counselor meeting ideally lands this week. Bring the visit reactions and the Naviance question (Colby / Tufts / UMass in or out)."},
+ {d:"2026-08-27",tag:"CT DAY",cls:"trip",who:"b",mins:"visit day",task:"<b>Wesleyan 9am tour</b> (~1.75 hr out), lunch, then <b>Connecticut College early-PM tour + in-person interview</b> (75-min tour includes a residence hall and dining hall). Home by ~6:30.",extra:"Two debriefs in the car. This completes every drivable unvisited match/likely still standing."},
+ {d:"2026-08-28",tag:"LOCALS",cls:"trip",who:"b",mins:"visit day",task:"<b>Brandeis morning</b> (the rebooked visit, 20 min away), <b>Brown afternoon</b> (~1 hr; the scale question: does 7,900 students still feel close?). Home for dinner.",extra:"If Tufts never happened, swap it into either half; it also works as a September Sunday walk."},
+ {d:"2026-08-29",tag:"OFF",cls:"quiet",who:"g",mins:"0–30 min",task:"<b>Nothing, or essay polish if it itches.</b>",extra:""},
+ {d:"2026-08-30",tag:"RANKING DAY",cls:"",who:"b",mins:"45 min",task:"<b>The ranking session, comparison table open:</b> confirm Bowdoin ED I; lock Clark EA (Nov 1); make the Naviance call (Colby/Tufts/UMass); settle the geography three from the virtual verdicts; trim the Far Reach count to something sane.",extra:"Output: the near-final list, written down. That was the counselor's September goal, landed early."},
+ {d:"2026-08-31",tag:"LAND IT",cls:"quiet",who:"g",mins:"60 min",task:"<b>Common App check:</b> personal statement pasted, Activities complete, Bowdoin added and its supplement started (supplements live under each school's Writing section once added).",extra:"Book the Hamilton video interview if not done (weekday slots; their ED I interview deadline is Nov 19). PARENT: calendar-hold anything unbooked, tomorrow the calendar belongs to preseason."},
+ {d:"2026-09-01",tag:"BUFFER",cls:"quiet",who:"g",mins:"0 min",task:"<b>Rest. School gear. Sleep.</b>",extra:""},
+ {d:"2026-09-02",tag:"PRESEASON",cls:"gone",who:"g",mins:"—",task:"<b>Preseason + orientation begin.</b> College shrinks to evenings: essay polish, supplements, remaining virtual interviews, FAFSA + CSS ~Oct 1, Bowdoin ED I Nov 15.",extra:"If the Bowdoin interview somehow never happened: watch for the Sept–Nov posting and take the first virtual slot."},
+];
+
+/* ---------- LIST DATA (compact) ---------- */
+const CDS="https://www.collegedata.fyi/schools/";
+const LIST=[
+ ["Bowdoin","reach","Reach · ED target","Far Reach ★",1,"https://www.bowdoin.edu/admissions/","https://www.bowdoin.edu/student-aid/estimate-aid/","bowdoin"],
+ ["Brown","reach","Reach","Suggested",0,"https://admission.brown.edu/","https://npc.collegeboard.org/student/app/brown","brown"],
+ ["Williams","reach","Reach","Far Reach",0,"https://www.williams.edu/admission-aid/","https://www.williams.edu/sfs/financial-aid-calculator/","williams-college"],
+ ["Swarthmore","reach","Reach · legacy","Far Reach",0,"https://www.swarthmore.edu/admissions-aid","https://www.swarthmore.edu/financial-aid/net-price-calculator","swarthmore"],
+ ["Amherst","reach","Reach · tentative","Far Reach",1,"https://www.amherst.edu/admission","https://www.amherst.edu/offices/financialaid/calculator","amherst"],
+ ["Pomona","reach","Reach · geo?","Far Reach",0,"https://www.pomona.edu/admissions/","https://www.pomona.edu/financial-aid/cost-attendance/estimate-your-aid","pomona-college"],
+ ["Wesleyan","match","Match","Reach",0,"https://www.wesleyan.edu/admission/","https://www.wesleyan.edu/admission/afford-aid/mit-calculator.html","wesleyan-university"],
+ ["Middlebury","match","Match","Far Reach",0,"https://www.middlebury.edu/college/admissions","https://npc.collegeboard.org/app/middlebury","middlebury-college"],
+ ["Vassar","match","Match","Reach",0,"https://www.vassar.edu/admission/","https://www.vassar.edu/admission/financial-aid/","vassar-college"],
+ ["Colby","match","High match","Not on list",1,"https://www.colby.edu/admission/","https://afa.colby.edu/cost-and-aid/calculate-your-costs/","colby"],
+ ["Hamilton","match","High match","Possible",0,"https://www.hamilton.edu/admission","https://www.hamilton.edu/admission/finaid/estimate-your-financial-aid","hamilton"],
+ ["Haverford","match","Match","Possible",0,"https://www.haverford.edu/admission","https://www.haverford.edu/financial-aid/net-price-calculator","haverford-college"],
+ ["Tufts","match","Match","Not on list",0,"https://admissions.tufts.edu/","https://students.tufts.edu/financial-services/undergrad-aid/prospectiveadmitted-students/financial-aid-calculators","tufts-university"],
+ ["Brandeis","match","Match","Possible",0,"https://www.brandeis.edu/admissions/","https://affordability.brandeis.edu/","brandeis"],
+ ["Bates","likely","Lower match","Reach",1,"https://www.bates.edu/admission/","https://www.bates.edu/financial-services/costs-financial-aid/financial-aid-estimator","bates"],
+ ["Skidmore","likely","Lower match","Likely",0,"https://www.skidmore.edu/admissions/","https://www.skidmore.edu/admissions/aid/calculators.php","skidmore-college"],
+ ["Connecticut College","likely","Lower match","Likely",0,"https://www.conncoll.edu/admission/","https://www.conncoll.edu/financial-aid/","connecticut-college"],
+ ["Clark","safety","Safety","Likely",1,"https://www.clarku.edu/undergraduate-admissions/","https://www.clarku.edu/financial-aid/calculators/net-price/","clark-university"],
+ ["UMass Amherst (Honors)","safety","Safety","Not on list",0,"https://www.umass.edu/admissions/","https://www.umass.edu/net_price_calculator/","university-of-massachusetts-amherst"],
+ ["Hobart & Wm Smith","likely","Likely (add)","Likely",0,"https://www.hws.edu/admissions/","https://www.hws.edu/admissions/tuition-scholarships-and-aid/financial-aid-calculators.aspx","hobart-william-smith-colleges"],
+ ["Union","likely","Likely (add)","Likely",0,"https://www.union.edu/admissions","https://www.union.edu/financial-aid-family-financing/net-price-calculator","union-college"],
+ ["Dickinson","likely","Likely (add)","Likely",0,"https://www.dickinson.edu/admissions","https://www.dickinson.edu/info/20081/financial_aid/1126/net_price_calculator","dickinson-college"],
+ ["Carleton","reach","Suggestion","Suggested",0,"https://www.carleton.edu/admissions/","https://www.carleton.edu/admissions/apply/afford/aid-estimators/npc/","carleton-college"],
+ ["Macalester","match","Suggestion","Suggested",0,"https://www.macalester.edu/admissions/","https://www.macalester.edu/financial-aid/estimate/","macalester-college"],
+ ["Davidson","reach","Suggestion","Suggested",0,"https://www.davidson.edu/admission-and-financial-aid","https://www.davidson.edu/admission-and-financial-aid/cost-attendance/estimate-your-costs","davidson-college"],
+ ["Gettysburg","match","Suggestion","Suggested",0,"https://www.gettysburg.edu/admissions-aid/","https://www.gettysburg.edu/admissions-aid/tuition-fees/net-price-calculator","gettysburg-college"],
+];
+
+/* ---------- RENDER ---------- */
+const $=s=>document.querySelector(s);
+const LS="gwyn_hq_v1";
+let DB=JSON.parse(localStorage.getItem(LS)||"{}");
+function save(){localStorage.setItem(LS,JSON.stringify(DB));}
+
+function isoToday(){const t=new Date();return t.getFullYear()+"-"+String(t.getMonth()+1).padStart(2,"0")+"-"+String(t.getDate()).padStart(2,"0");}
+function fmt(dISO,opts){return new Date(dISO+"T00:00:00").toLocaleDateString(undefined,opts||{weekday:"long",month:"long",day:"numeric"});}
+const TODAY=isoToday();
+
+/* today box */
+(function(){
+  let entry=DAYS.find(x=>x.d===TODAY);
+  const past=TODAY>"2026-09-02", pre=TODAY<"2026-08-01";
+  if(pre)entry=DAYS[0];
+  if(!entry&&!past){ // gap day (shouldn't happen) → next upcoming
+    entry=DAYS.find(x=>x.d>TODAY);
+  }
+  if(past||!entry){
+    $("#tKicker").textContent="THE AUGUST PUSH IS DONE";
+    $("#tDate").textContent=fmt(TODAY);
+    $("#tTask").innerHTML="Preseason mode: evenings only. Essay polish, supplements (inside the Common App under each school), remaining virtual interviews, FAFSA + CSS around Oct 1, <b>Bowdoin ED I Nov 15</b>.";
+    $("#tMins").textContent="evenings only";
+    $("#tExtra").innerHTML='<a href="https://apply.commonapp.org/login" target="_blank">Open the Common App ↗</a>';
+    document.querySelector(".donebox").style.display="none";
+    return;
+  }
+  $("#tKicker").textContent=(entry.d===TODAY)?"TODAY, THE ONE THING":"FIRST UP";
+  $("#tDate").textContent=fmt(entry.d)+" · "+entry.tag;
+  $("#tMins").textContent="≈ "+entry.mins;
+  $("#tTask").innerHTML=entry.task;
+  $("#tExtra").innerHTML=entry.extra||"";
+  if(!entry.extra)$("#tExtra").style.display="none";
+  const k="done_"+entry.d;
+  const cb=$("#tDone");cb.checked=!!DB[k];
+  cb.onchange=()=>{DB[k]=cb.checked;save();renderCal();};
+})();
+
+/* week strip */
+(function(){
+  const start=new Date(TODAY+"T00:00:00");
+  const dow=(start.getDay()+6)%7; // Monday=0
+  start.setDate(start.getDate()-dow);
+  let html="";
+  for(let i=0;i<7;i++){
+    const d=new Date(start);d.setDate(start.getDate()+i);
+    const iso=d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    const e=DAYS.find(x=>x.d===iso);
+    const icon=e?(e.cls==="trip"?"🚗":e.cls==="gone"?"🌲":e.tag==="BOOKINGS"?"📝":e.mins&&e.mins!=="0 min"?"✏️":"·"):"·";
+    html+=`<div class="wd ${iso===TODAY?'today-cell':''}"><div class="dn">${d.toLocaleDateString(undefined,{weekday:"short"})} ${d.getDate()}</div><div class="ic2">${icon}</div><div>${e?e.tag.toLowerCase():""}</div></div>`;
+  }
+  $("#weekStrip").innerHTML=html;
+})();
+
+/* calendar */
+const PHASES=[
+ {from:"2026-08-01",to:"2026-08-06",t:"This week: home + Boston dinner Thursday",n:"Bowdoin is the headline. Everything else is 45 minutes or optional."},
+ {from:"2026-08-07",to:"2026-08-08",t:"The drive: Vassar Friday, Hamilton Saturday",n:"Two real visits folded into a drive that was happening anyway. One campus per day."},
+ {from:"2026-08-09",to:"2026-08-15",t:"Institute week (Chautauqua): low dose",n:"30–45 minutes most mornings. The essay gets drafted here; Mom books the late-August slots."},
+ {from:"2026-08-16",to:"2026-08-21",t:"Home travel + Camp Sunshine: protected",n:"Zero college work for Gwyn all week."},
+ {from:"2026-08-22",to:"2026-09-02",t:"The home window: Aug 22–31, then preseason",n:"Three trips, plenty of slack, and the ranking session that locks the list."},
+];
+function renderCal(){
+  let html="";
+  PHASES.forEach(ph=>{
+    html+=`<h3 class="phase"><span class="b">${fmt(ph.from,{month:"short",day:"numeric"})} – ${fmt(ph.to,{month:"short",day:"numeric"})}</span> ${ph.t}</h3><div class="phase-note">${ph.n}</div>`;
+    DAYS.filter(x=>x.d>=ph.from&&x.d<=ph.to).forEach(e=>{
+      const isT=e.d===TODAY, isPast=e.d<TODAY, done=!!DB["done_"+e.d];
+      const whoTag=e.who==="g"?'<span class="who g">GWYN</span>':e.who==="p"?'<span class="who p">PARENT</span>':'<span class="who b">BOTH</span>';
+      html+=`<div class="day ${isT?'today-day':''} ${isPast&&!isT?'past-day':''}" ${isT?'id="todayCard"':''}>
+        <div class="hd"><span class="d">${fmt(e.d,{weekday:"short",month:"short",day:"numeric"})}${isT?" · TODAY":""}</span>
+        <span class="badges"><span class="mins2">${e.mins}</span><span class="th ${e.cls}">${e.tag}</span></span></div>
+        <div class="bd">${whoTag}${e.task}${e.extra?`<div class="sub2">${e.extra}</div>`:""}
+        <div class="dchk"><input type="checkbox" data-d="${e.d}" ${done?"checked":""} id="c_${e.d}"><label for="c_${e.d}">${done?"done ✓":"mark done"}</label></div></div>
+      </div>`;
+    });
+  });
+  $("#calendar").innerHTML=html;
+  document.querySelectorAll('#calendar input[type=checkbox]').forEach(b=>b.onchange=()=>{DB["done_"+b.dataset.d]=b.checked;save();renderCal();});
+}
+renderCal();
+
+/* list table */
+$("#listTbl tbody").innerHTML=LIST.map(r=>{
+  const [name,cat,tier,cns,vis,adm,npc,cds]=r;
+  return `<tr><td class="s">${name}</td><td><span class="tier t-${cat}">${tier}</span></td><td>${cns}</td><td>${vis?'<span class="vischip">✓</span>':"–"}</td>
+  <td style="white-space:nowrap"><a class="lkbtn lk-app" href="${adm}" target="_blank">Admissions ↗</a> <a class="lkbtn lk-cds" href="${CDS}${cds}" target="_blank">Common Data ↗</a> <a class="lkbtn lk-npc" href="${npc}" target="_blank">Net price ↗</a></td></tr>`;
+}).join("");
+</script>
+</body>
+</html>
