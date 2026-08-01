@@ -541,7 +541,7 @@ const byk=k=>SCHOOLS.find(s=>s.k===k);
 const esc=t=>(""+t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 
 document.getElementById("todayline").textContent="Today: "+new Date().toLocaleDateString(undefined,{weekday:"short",month:"long",day:"numeric",year:"numeric"});
-document.getElementById("foot").innerHTML="Built June 21, 2026 as the visit layer for the College Search workspace. Visit/interview facts pulled from each school's official admissions pages on 6/21/2026; live scheduling calendars need a browser to confirm exact dates. A planning tool, not an admissions prediction. Net-price, deadlines, and aid policy live in the <a href=\"Resources_and_Guide.html\">Resources &amp; Guide</a>.";
+document.getElementById("foot").innerHTML="Built June 21, 2026 as the visit layer for the College Search workspace. Visit/interview facts pulled from each school's official admissions pages on 6/21/2026; live scheduling calendars need a browser to confirm exact dates. A planning tool, not an admissions prediction. Net-price, deadlines, and aid policy live in the <a href=\"index.html\">Resources &amp; Guide</a>.";
 
 /* ============================ TABS ============================ */
 $$(".tabs button").forEach(b=>b.onclick=()=>{
