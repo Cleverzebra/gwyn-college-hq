@@ -438,6 +438,14 @@ const iso=dt=>dt.getFullYear()+"-"+String(dt.getMonth()+1).padStart(2,"0")+"-"+S
 const TODAY=iso(new Date());
 const fmt=(d,o)=>new Date(d+"T00:00:00").toLocaleDateString(undefined,o||{weekday:"long",month:"long",day:"numeric"});
 const icon=e=>!e?"·":(e.cls==="trip"?"🚗":e.cls==="off"?"🌿":e.tag.indexOf("ESSAY")===0?"✏️":e.tag==="BOOKINGS"?"📝":"●");
+/* short labels so the day strip never breaks a word at phone width */
+const SHORT={"BOOKINGS":"book","TWO SMALL THINGS":"2 things","HAMILTON YES/NO":"decide",
+ "ESSAY STEP 1":"essay 1","ESSAY STEP 2":"essay 2","ESSAY STEP 3":"essay 3","ESSAY STEP 4":"essay 4",
+ "ESSAY STEP 5":"essay 5","ESSAY STEP 6":"essay 6","ESSAY STEP 7":"essay 7",
+ "BOWDOIN DAY":"bowdoin","LIGHT DAY":"light","DRIVE IN":"drive","BREAK FROM WRITING":"tour",
+ "LAST DAY":"free","CAMP SUNSHINE":"camp","CAMP PICKUP":"pickup","DRIVE SOUTH":"drive",
+ "SWARTHMORE":"swarth.","HAVERFORD":"haverf.","CONNECTICUT":"conn","TIDY UP":"tidy","PRESEASON":"sports"};
+const shortTag=e=>SHORT[e.tag]||e.tag.toLowerCase();
 
 /* today box */
 (function(){
@@ -488,7 +496,7 @@ const icon=e=>!e?"·":(e.cls==="trip"?"🚗":e.cls==="off"?"🌿":e.tag.indexOf(
     if(!e)continue;
     h+=`<a class="wd ${k===TODAY?'on':''}" href="#d${k}" data-jump="${k}">
       <span class="dn">${dt.toLocaleDateString(undefined,{weekday:"short"})} ${dt.getDate()}</span>
-      <span class="ic2">${icon(e)}</span>${e.tag.toLowerCase()}</a>`;
+      <span class="ic2">${icon(e)}</span>${shortTag(e)}</a>`;
   }
   $("#weekStrip").innerHTML=h||'<div class="hint">The August plan is finished.</div>';
 })();
