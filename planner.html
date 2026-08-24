@@ -171,7 +171,7 @@
   <div class="startnow">
     <div class="k">START HERE, ONE THING (UPDATED AUG 1)</div>
     <div class="t" id="startThing">Book Gwyn's Bowdoin on-campus interview for Wednesday Aug 5 (or Thursday Aug 6), tonight.</div>
-    <div class="d">Checked live on 8/1: Wed 8/5 has 9am/10am/1pm/2pm/3pm open; Thu 8/6 has 9am/10am/1pm/2pm. The on-campus calendar shows <b>nothing after Aug 21</b>, and Sept&ndash;Nov (virtual) isn't posted yet, so this week is the clean shot for the ED school. Book at <a href="https://admissions.bowdoin.edu/portal/on-campus-interview" target="_blank">admissions.bowdoin.edu/portal/on-campus-interview</a>. Gwyn's own day-by-day page is <a href="index.html">College HQ</a>; this planner is the deeper reference (rubric, checklist, debriefs).</div>
+    <div class="d">Checked live on 8/1: Wed 8/5 has 9am/10am/1pm/2pm/3pm open; Thu 8/6 has 9am/10am/1pm/2pm. The on-campus calendar shows <b>nothing after Aug 21</b>, and Sept - Nov (virtual) isn't posted yet, so this week is the clean shot for the ED school. Book at <a href="https://admissions.bowdoin.edu/portal/on-campus-interview" target="_blank">admissions.bowdoin.edu/portal/on-campus-interview</a>. Gwyn's own day-by-day page is <a href="index.html">College HQ</a>; this planner is the deeper reference (rubric, checklist, debriefs).</div>
   </div>
 
   <div class="tabs">
@@ -602,7 +602,7 @@ function renderPlan(){
         <div class="ctrls">
           <div><label>Priority</label>
             <select data-k="${s.k}" data-f="priority" class="${st.priority==='High'?'pr-high':''}">
-              <option value="">—</option>${["High","Medium","Later","Decide first"].map(o=>`<option ${st.priority===o?"selected":""}>${o}</option>`).join("")}
+              <option value=""> - </option>${["High","Medium","Later","Decide first"].map(o=>`<option ${st.priority===o?"selected":""}>${o}</option>`).join("")}
             </select></div>
           <div><label>Status</label>
             <select data-k="${s.k}" data-f="status" class="${stClass}">
@@ -611,7 +611,7 @@ function renderPlan(){
           <div><label>Planned date</label><input type="date" data-k="${s.k}" data-f="date" value="${st.date||""}"></div>
           <div><label>Owner</label>
             <select data-k="${s.k}" data-f="owner">
-              <option value="">—</option>${["Gwyn","Mom","Both"].map(o=>`<option ${st.owner===o?"selected":""}>${o}</option>`).join("")}
+              <option value=""> - </option>${["Gwyn","Mom","Both"].map(o=>`<option ${st.owner===o?"selected":""}>${o}</option>`).join("")}
             </select></div>
           <div style="grid-column:1/-1"><label>Next action / note</label><input type="text" data-k="${s.k}" data-f="action" placeholder="e.g. register tour for week of July 13; ask about Greek life" value="${esc(st.action||"")}"></div>
         </div>
@@ -634,7 +634,7 @@ $("#dl").onclick=()=>{
 
 /* ============================ RUBRIC ============================ */
 function fillPickers(){
-  const opts=SCHOOLS.map(s=>`<option value="${s.k}">${esc(s.name)} — ${esc(s.geo)}</option>`).join("");
+  const opts=SCHOOLS.map(s=>`<option value="${s.k}">${esc(s.name)} - ${esc(s.geo)}</option>`).join("");
   $("#rubPick").innerHTML=opts;$("#debPick").innerHTML=opts;
 }
 function renderRubric(){
@@ -670,9 +670,9 @@ function renderCmp(){
     const st=S(s.k);const sc=RUBRIC.map(c=>st.rubric[c.k]).filter(v=>v>0);
     if(!sc.length&&!st.verdict)return null;
     const tot=sc.reduce((a,b)=>a+b,0);
-    const bw=st.rubric.bowdoin>0?st.rubric.bowdoin:(st.rubric.bowdoin===-1?"n/a":"—");
-    const wm=st.rubric.warmth>0?st.rubric.warmth:"—";
-    const vmap={up:'<span style="color:var(--good);font-weight:700">↑ up</span>',same:'<span style="color:var(--warn);font-weight:700">→ stays</span>',down:'<span style="color:var(--bad);font-weight:700">↓ down</span>',off:'<span style="color:#3a3f47;font-weight:700">✕ off</span>',"":"—"};
+    const bw=st.rubric.bowdoin>0?st.rubric.bowdoin:(st.rubric.bowdoin===-1?"n/a":" - ");
+    const wm=st.rubric.warmth>0?st.rubric.warmth:" - ";
+    const vmap={up:'<span style="color:var(--good);font-weight:700">↑ up</span>',same:'<span style="color:var(--warn);font-weight:700">→ stays</span>',down:'<span style="color:var(--bad);font-weight:700">↓ down</span>',off:'<span style="color:#3a3f47;font-weight:700">✕ off</span>',"":" - "};
     return {nm:s.name,tot,n:sc.length,bw,wm,vd:vmap[st.verdict||""],sort:tot};
   }).filter(Boolean).sort((a,b)=>b.sort-a.sort);
   if(!rows.length){$("#cmpTbl").innerHTML=`<tr><td style="padding:14px;color:var(--muted)">No schools scored yet. Score one on a visit and it shows up here.</td></tr>`;return;}
