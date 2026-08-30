@@ -79,7 +79,6 @@
   .day.now{border:2px solid var(--sea-2);box-shadow:0 0 0 3px rgba(30,140,168,.13)}
   .day.flash{animation:fl 1.4s ease-out}
   @keyframes fl{0%{box-shadow:0 0 0 5px rgba(30,140,168,.35)}100%{box-shadow:0 0 0 3px rgba(30,140,168,0)}}
-  .day.past{opacity:.5}
   .day .hd{padding:8px 13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:6px;
     border-bottom:1px solid #eef2f5;background:#fbfdfe}
   .day .hd .d{font-weight:800;color:var(--sea-deep);font-size:13.5px}
@@ -170,19 +169,18 @@
   </nav>
 
   <!-- CALENDAR -->
-  <h2 class="sec" id="calendar">The last stretch</h2>
+  <h2 class="sec" id="calendar">The week ahead</h2>
   <div id="phases"></div>
 
   <details class="fold">
-    <summary>August so far <span class="sumnote">done, no tasks in here</span></summary>
+    <summary>August so far <span class="sumnote">the record, no tasks in here</span></summary>
     <div class="inner" style="font-size:13.3px">
       <ul style="margin:2px 0 2px 20px">
-        <li><b>Mon 8/4:</b> you talked with Ms. D-L (the Bowdoin grad) and your counselor. Both done.</li>
-        <li><b>Wed 8/5:</b> the Bowdoin interview, on campus in Brunswick. The one that mattered most all summer, and it is behind you. Thank-you note to your interviewer: sent.</li>
-        <li><b>Chautauqua:</b> the personal statement got started. It keeps going this week in small pieces.</li>
-        <li><b>Aug 17 to 21:</b> Camp Sunshine. No college work, as planned.</li>
-        <li><b>Vassar:</b> the 8/7 tour did not happen, and nothing is lost. Their interviews run October to March, after you apply. Visited 8/28 and liked.</li>
-        <li><b>Sun 8/23:</b> the Philadelphia trip moved to Thursday through Saturday of this week.</li>
+        <li><b>Confirmed done:</b> Clark visited 7/11. Vassar visited Fri 8/28, beautiful and liked. The personal statement is started and in light revision.</li>
+        <li><b>Bowdoin interview:</b> booked for Wed 8/5 on campus. If it happened, nothing is left to book there; if it did not, say so and the plan adjusts (their Sept to Nov schedule posts soon).</li>
+        <li><b>Ms. D-L and your counselor:</b> the meetings still need scheduling; that is today's card, nothing assumed.</li>
+        <li><b>Aug 17 to 21:</b> Camp Sunshine week, no college work by design.</li>
+        <li><b>Philadelphia:</b> August had no bookable tours at either school (verified), so it moved to Mon Sept 21, the no-school day.</li>
       </ul>
     </div>
   </details>
@@ -196,7 +194,7 @@
       <div class="scroll"><table>
         <thead><tr><th>School</th><th>Status</th><th>What to do</th><th>Go</th></tr></thead>
         <tbody>
-          <tr><td class="s">Bowdoin ★</td><td class="ok">DONE 8/5</td><td>On-campus interview held in Brunswick. Thank-you note sent. Nothing left to book.</td><td class="sumnote">done</td></tr>
+          <tr><td class="s">Bowdoin ★</td><td class="ok">Booked 8/5</td><td>On-campus interview was booked for Wed 8/5 in Brunswick. If it happened, nothing left to book, and a short thank-you to the interviewer is the only loose end. If it did not, their Sept to Nov schedule posts soon.</td><td class="sumnote">check off</td></tr>
           <tr><td class="s">Swarthmore ★</td><td class="maybe">Ask + Sept</td><td>Optional but it counts: a written report goes in your file. Checked 8/26: there is no Friday slot, their August calendar is entirely closed. Fall interview slots post in September, so book one then, ideally alongside the Sept 19 visit. One interview only, US students only.</td><td><a class="go" href="https://apply.swarthmore.edu/portal/AdmissionsInterviews" target="_blank">Book</a></td></tr>
           <tr><td class="s">Macalester ★</td><td class="maybe">September</td><td>Virtual, counts in your file, first come and one per student. Do their 5-minute preliminary form (or start the Common App) first, then book; seniors must interview by Jan 29.</td><td><a class="go" href="https://www.macalester.edu/admissions/interviews/" target="_blank">Start</a></td></tr>
           <tr><td class="s">Conn College</td><td class="maybe">September</td><td>Optional but highly recommended, 30 min, online counts the same as on campus. Window runs to mid-December.</td><td><a class="go" href="https://admission.conncoll.edu/portal/campus-visit" target="_blank">Book</a></td></tr>
@@ -319,7 +317,7 @@
           <tr><td class="s">early Sept</td><td>Confirm two teacher recommenders and hand your counselor the resume. From-home interviews start: Haverford Zoom, then Macalester, then Conn College online, roughly one per week.</td></tr>
           <tr><td class="s">Fri Sept 18</td><td>SAT registration closes for the Oct 3 test (only if Sunday said yes).</td></tr>
           <tr><td class="s"><b>Sat Sept 19</b></td><td><b>Philadelphia, rescheduled from August:</b> Swarthmore and Haverford in one day, 20 minutes apart, with real student-led tours. Swarthmore is bookable now for that date; Haverford posts its fall Saturdays mid-September. Check it against the game schedule before booking.</td></tr>
-          <tr><td class="s">Thu Oct 1</td><td>FAFSA and CSS Profile open (Mom's lane). Bowdoin's alumni-interview round also starts, which does not matter for you: yours is done.</td></tr>
+          <tr><td class="s">Thu Oct 1</td><td>FAFSA and CSS Profile open (Mom's lane). Bowdoin's alumni-interview round also starts; it only matters if the summer interview did not happen.</td></tr>
           <tr><td class="s">Sat Oct 3</td><td>SAT, if registered. Scores back Oct 16.</td></tr>
           <tr><td class="s">Oct 5 / Oct 19</td><td>Wesleyan fall Open House days. Wesleyan is unvisited and on the list, so one of these two dates is its visit.</td></tr>
           <tr><td class="s">Sun Nov 1</td><td>Clark Early Action goes in, and Conn College added a brand-new Early Action this year, both nonbinding early reads. Other early deadlines that week for reference: Brown and Macalester Nov 1, Brandeis and Tufts Nov 2, Pomona Nov 8.</td></tr>
@@ -421,10 +419,7 @@ const DAYS=[
   task:"<b>Still the long weekend. Nothing scheduled.</b>",extra:""},
 ];
 
-const PHASES=[
- {from:"2026-08-24",to:"2026-09-01",t:"The last stretch",n:"Vassar done, Brandeis Tuesday, the ranking talk when it fits. Past days live in the fold below, done and closed."},
- {from:"2026-09-02",to:"2026-09-06",t:"Preseason starts + the long weekend",n:"School takes over Wednesday. One small college task all week, then the holiday weekend off."},
-];
+/* groups are computed from the current date at render time; see paint() */
 
 const CDS="https://www.collegedata.fyi/schools/";
 const LIST=[
@@ -561,11 +556,12 @@ const shortTag=e=>SHORT[e.tag]||e.tag.toLowerCase();
 
 /* calendar. Rendered once; ticking updates in place so open folds and scroll survive. */
 const scoreable=e=>e.cls!=="off"&&e.mins!=="0 min";
+let GROUPS=[];
 function counts(){
-  PHASES.forEach((p,pi)=>{
-    const el=document.getElementById("cnt"+pi);
+  GROUPS.forEach((g,gi)=>{
+    const el=document.getElementById("cnt"+gi);
     if(!el)return;
-    const kids=DAYS.filter(x=>x.d>=p.from&&x.d<=p.to&&scoreable(x));
+    const kids=g.days.filter(scoreable);
     el.textContent=kids.length?(" · "+kids.filter(x=>DB["done_"+x.d]).length+"/"+kids.length+" done"):"";
   });
 }
@@ -575,15 +571,27 @@ function syncRow(d,val){
   counts();
 }
 function paint(){
+  /* Forward only: the calendar starts on the day the page is opened.
+     Past days never render; done means a checked box, nothing else. */
+  const future=DAYS.filter(x=>x.d>=TODAY);
+  const plus6=(()=>{const t=new Date(TODAY+"T00:00:00");t.setDate(t.getDate()+6);return iso(t);})();
+  GROUPS=[];
+  const week=future.filter(x=>x.d<=plus6);
+  const later=future.filter(x=>x.d>plus6);
+  if(week.length)GROUPS.push({t:"The next 7 days",n:"One small thing a day. Anything not checked off just rolls forward, no penalty.",days:week,open:true});
+  if(later.length)GROUPS.push({t:"After that",n:"Already scheduled; it will roll into the week as the days arrive.",days:later,open:false});
+  if(!GROUPS.length){
+    $("#phases").innerHTML='<div class="phase-note">No dated day cards left. Every upcoming date lives in the fall list below.</div>';
+    return;
+  }
   let h="";
-  PHASES.forEach((p,pi)=>{
-    const open=(TODAY>=p.from&&TODAY<=p.to)||(pi===0&&TODAY<"2026-08-24");
-    const kids=DAYS.filter(x=>x.d>=p.from&&x.d<=p.to);
-    h+=`<details class="fold" ${open?"open":""}><summary>${p.t} <span class="sumnote">${fmt(p.from,{month:"short",day:"numeric"})} to ${fmt(p.to,{month:"short",day:"numeric"})}<span id="cnt${pi}"></span></span></summary><div class="inner"><div class="phase-note">${p.n}</div>`;
-    kids.forEach(e=>{
-      const now=e.d===TODAY, past=e.d<TODAY, dn=!!DB["done_"+e.d];
+  GROUPS.forEach((g,gi)=>{
+    const a=g.days[0].d, b=g.days[g.days.length-1].d;
+    h+=`<details class="fold" ${g.open?"open":""}><summary>${g.t} <span class="sumnote">${fmt(a,{month:"short",day:"numeric"})} to ${fmt(b,{month:"short",day:"numeric"})}<span id="cnt${gi}"></span></span></summary><div class="inner"><div class="phase-note">${g.n}</div>`;
+    g.days.forEach(e=>{
+      const now=e.d===TODAY, dn=!!DB["done_"+e.d];
       const w=e.who==="g"?'<span class="who g">GWYN</span>':e.who==="p"?'<span class="who p">MOM</span>':'<span class="who b">BOTH</span>';
-      h+=`<div class="day ${now?'now':''} ${past&&!now?'past':''}" id="d${e.d}">
+      h+=`<div class="day ${now?'now':''}" id="d${e.d}">
         <div class="hd"><span class="d">${fmt(e.d,{weekday:"short",month:"short",day:"numeric"})}${now?" · today":""}</span>
         <span class="badges"><span class="mins2">${e.mins}</span><span class="th ${e.cls}">${e.tag}</span></span></div>
         <div class="bd">${w}${e.task}
