@@ -173,14 +173,14 @@
   <div id="phases"></div>
 
   <details class="fold">
-    <summary>August so far <span class="sumnote">the record, no tasks in here</span></summary>
+    <summary>Summer and August, the record <span class="sumnote">what happened, no tasks in here</span></summary>
     <div class="inner" style="font-size:13.3px">
       <ul style="margin:2px 0 2px 20px">
-        <li><b>Confirmed done:</b> Clark visited 7/11. Vassar visited Fri 8/28, beautiful and liked. The personal statement is started and in light revision.</li>
-        <li><b>Bowdoin interview:</b> booked for Wed 8/5 on campus. If it happened, nothing is left to book there; if it did not, say so and the plan adjusts (their Sept to Nov schedule posts soon).</li>
-        <li><b>Ms. D-L and your counselor:</b> the meetings still need scheduling; that is today's card, nothing assumed.</li>
-        <li><b>Aug 17 to 21:</b> Camp Sunshine week, no college work by design.</li>
-        <li><b>Philadelphia:</b> August had no bookable tours at either school (verified), so it moved to Mon Sept 21, the no-school day.</li>
+        <li><b>Visited:</b> Clark on 7/11, and Vassar on Fri 8/28, which read as a keeper: below Bowdoin, clearly on the list. The personal statement is started and in light revision.</li>
+        <li><b>Bowdoin interview:</b> booked for Wed 8/5 on campus and reported as gone well, with the thank-you note sent. Nothing is left to book there.</li>
+        <li><b>Did not happen:</b> Brandeis three times, 7/11, 8/6 and 9/1. Skidmore Sat 8/29 was optional and was skipped. Brown never got its August visit. Camp Sunshine took Aug 17 to 21, no college work by design.</li>
+        <li><b>Philadelphia:</b> August had no bookable tours at either school (verified 8/26), so it moved to Mon Sept 21, the no-school day.</li>
+        <li><b>Still open from August:</b> the transcript review form, due 8/28 and confirmed unsent on 8/30; the ranking talk with Mom; and the Bowdoin Net Price Calculator, which is Mom's.</li>
       </ul>
     </div>
   </details>
@@ -357,7 +357,7 @@
   <a class="top" href="#today">↑ back to today</a>
 
   <footer>
-    Updated Sept 2, 2026: the Brandeis visit did not happen on 9/1 (reported), and a live re-check of its calendar this morning shows every open day runs 9:15am and 1:15pm only, both inside the school day, so Brandeis moves to a planned-absence trip alongside Brown. SAT deadlines re-checked on College Board 8/31: Nov 7 stays the registered date, and adding Oct 3 as a second sitting stays open until Sept 18. Transcript form and ranking talk were both still open as of 8/30. Booking pages can fill, so confirm when booking. A planning tool, not a prediction.
+    Updated Sept 5, 2026: the daily cards now run through Sun Sept 13, and August is folded into the record at the top rather than sitting in the calendar. Verified live today: Brandeis is closed Sept 1 to 7 and open Sept 8-11, 14-18, 22-25 and 28-30, still 9:15am and 1:15pm only; Wesleyan is closed through Sept 7, opens Tue Sept 8, and shows a Fall Saturday visit on Sept 26. Both calendars were checked again this morning and neither has moved. SAT deadlines from College Board 8/31 stand: Nov 7 is the registered date, and adding Oct 3 as a second sitting stays open until Sept 18. Transcript form and ranking talk were both still open as of 8/30. Booking pages can fill, so confirm when booking. A planning tool, not a prediction.
   </footer>
 </div>
 
@@ -365,59 +365,39 @@
 /* ============ DAILY PLAN ============
    who: g=Gwyn p=Mom b=both · tag class: ""=desk, trip, off · mins = Gwyn's time */
 const DAYS=[
- {d:"2026-08-24",tag:"EMAILS + CALLS",cls:"",who:"g",mins:"30 min",
-  task:"<b>1. Follow up with Ms. D-L</b>, two minutes: tell her the Bowdoin interview went well and thank her, since her advice fed straight into it. This link opens the email already written, just add her address: <a href='mailto:?subject=Thank%20you%2C%20and%20how%20the%20Bowdoin%20interview%20went&body=Hi%20Ms.%20D-L%2C%0A%0AThank%20you%20again%20for%20talking%20with%20me%20before%20my%20Bowdoin%20interview.%20It%20went%20really%20well.%20We%20met%20on%20campus%20in%20Brunswick%20and%20your%20advice%20made%20a%20real%20difference.%0A%0ABowdoin%20is%20still%20my%20first%20choice%20and%20I%20will%20keep%20you%20posted%20this%20fall.%0A%0AThank%20you%2C%0AGwyn'>start the email</a>.<br><br><b>2. Email your counselor to ask for a college counseling meeting Wednesday.</b> Reply on the existing thread in your school inbox, two sentences: you would like to talk through the list and the SAT question before the family ranking talk on Sunday, and Wednesday morning or afternoon both work.<br><br><b>3. Two calls about Friday.</b> Philadelphia lands in move-in week, so confirm what is running: <b>Swarthmore, 610-328-8300</b> (what tours run Fri 8/28, <b>and is an on-campus interview slot open that day</b>), then <b>Haverford</b> via their <a href='https://admission.haverford.edu/portal/guided_tour_information_session' target='_blank'>tour portal</a> or 610-896-1350.",
-  extra:"<b>Brown tomorrow is a maybe.</b> Decide with Mom tonight; book the <a href='https://apply.college.brown.edu/portal/campus-visit_vNew' target='_blank'>tour</a> only if it is a yes. A no costs nothing: Brown can be a fall Saturday, or come off the list Sunday. Already done and logged: your thank-you note to the Bowdoin interviewer. Mom checks in tonight; the hotel is hers."},
-
- {d:"2026-08-25",tag:"BROWN, IF YES",cls:"trip",who:"b",mins:"half day, or free",
-  task:"<b>Only if last night's answer was yes.</b> Brown is about an hour each way: tour and info session in Providence, home by early afternoon. Welcome Center, 21 Prospect St. The question to hold all morning: <b>does a school of 7,910 still feel close?</b>",
-  extra:"If Brown was a no, today is free: 25 minutes on the essay, one SAT Coach set if you feel like it, done. Worth knowing either way: Brown runs no interview at all, and Brown now requires SAT or ACT scores, which your 1520 covers comfortably."},
-
- {d:"2026-08-26",tag:"COUNSELOR DAY",cls:"",who:"g",mins:"meeting + 25 min",
-  task:"<b>Trip call first, checked live at 5pm today:</b> Swarthmore has <b>nothing bookable in all of August</b> and Haverford has <b>no tour Friday, only a 10:45am info session</b>. Eleven hours of driving for 45 minutes and no Swarthmore. The recommendation is to <b>postpone Philadelphia to Saturday Sept 19</b> (both run real tours then) and swap in closer schools that ARE open: <b>Vassar Friday</b> (10am or 2pm, the tour you missed 8/7), with <b>UMass</b> (9:30am or 2pm) and <b>Skidmore</b> (Fri 11am/1:30pm, or Sat 9:30/11am, the only Saturday tour on the whole list) as the other choices. Pick tonight: you register (ten minutes, links in the booking list), Mom cancels the hotel. <b>Then: college counseling meeting</b> (you asked for it Monday; the time lands when he replies). Bring four things: how Bowdoin and the visits have felt, the Sunday ranking-talk plan, the SAT retake question, and one direct ask: which schools would you cut? Then 15 minutes on the personal statement if there is gas left.",
-  extra:"Also 10 minutes today: the school transcript review form, due Friday 8/28, in your school email from the college office. If no adult reader has the essay draft yet, send it to one today, even unfinished."},
-
- {d:"2026-08-27",tag:"HOME DAY",cls:"",who:"g",mins:"30 min",
-  task:"<b>Two things:</b> send the transcript review form back (due tomorrow, the Google form in your school email), and 20 minutes on the essay, whichever of draft, fixes, or opening is next.",
-  extra:"Tonight, ten minutes: register tomorrow's pick (Vassar 10am recommended) and Saturday's Skidmore slot if you are doing both. Links are in the booking list. Mom confirms the driving plan and cancels the hotel."},
-
- {d:"2026-08-28",tag:"VASSAR, DONE",cls:"trip",who:"b",mins:"done",
-  task:"<b>Vassar, visited.</b> Beautiful campus, and you liked it: not Bowdoin, but clearly a keeper. That is exactly the read tomorrow's ranking talk needs.",
-  extra:"Two minutes when you can: the Vassar debrief in the <a href='planner.html'>visit toolkit</a>, while the details are fresh. Vassar's interview happens after you apply (October to March), nothing to book now."},
-
- {d:"2026-08-29",tag:"SKIDMORE?",cls:"trip",who:"b",mins:"optional day trip",
-  task:"<b>Optional: Skidmore, the only school on the list with a real Saturday session in August.</b> 9:30am or 11:00am, a 30-minute info session with admissions plus a mapped self-guided campus walk, about 3 hours each way. The real test is the town: walk Broadway in Saratoga Springs after, that is Skidmore's whole differentiator.",
-  extra:"Skipping is fine too; it is a counselor Likely, not a must-see, and tomorrow is the ranking talk. If you skip: rest, or 20 minutes on the essay."},
-
- {d:"2026-08-30",tag:"TWO EMAILS",cls:"",who:"g",mins:"25 min",
-  task:"<b>Two short scheduling emails, both about people who want to hear from you.</b> 1. Reply to your counselor on the existing thread: ask for a college-counseling meeting the first week of school, and put two things on the agenda: which schools to trim, and how the school handles a school-day college visit, since Brown only runs weekday tours from Sept 28. 2. Email Ms. D-L to set up your Bowdoin call: two sentences, offer a couple of after-practice times next week.",
-  extra:"Still open, no pressure today: the ranking talk with Mom, which has not happened yet. Labor Day Sunday Sept 6 is the next clear window, and nothing comes off the list before you two decide together. The transcript response form is also still sitting in your school email, five days past due. And ten minutes on the essay if it is calling: the statement is started, and the next move is just a little revision."},
-
- {d:"2026-08-31",tag:"BOOK + REVISE",cls:"",who:"g",mins:"30 min",
-  task:"<b>Book tomorrow morning, then 20 minutes of essay revision.</b> Register for the <a href='https://admissions.brandeis.edu/portal/visit_brandeis' target='_blank'>Brandeis 9:15am session</a> on Tuesday. Re-checked live tonight: Tuesday still shows both 9:15am and 1:15pm open, and every August date is now closed, so tomorrow is the visit. The 9:15am gets you home by lunch and leaves the rest of the day open.",
-  extra:"Two minutes, and it is late: send back the transcript response form. It was due Fri 8/28, it is still in your school email from the college office, and the office cannot send your transcripts until it comes back."},
-
- {d:"2026-09-01",tag:"BRANDEIS",cls:"trip",who:"b",mins:"half day",
-  task:"<b>Record: the Brandeis visit did not happen</b> (reported 9/2). That is three attempts, 7/11, 8/6 and 9/1, and Brandeis is still the one unvisited school that is only 20 minutes away.",
-  extra:"Nothing to fix retroactively. Brandeis only runs 9:15am and 1:15pm, both inside the school day, so it now needs a planned absence the same way Brown does. That is on the parent list, not yours."},
-
- {d:"2026-09-02",tag:"PRESEASON",cls:"off",who:"g",mins:"evenings only",
-  task:"<b>Preseason and orientation start. Nothing college today.</b> From here it is evenings only, one small thing at a time: supplements, the from-home sessions, the essay's next pass. The fall list below has every date through January.",
-  extra:"For the record, so it is not hanging over you: Brandeis did not happen yesterday. It runs 9:15am and 1:15pm only, both during school, so it moves to a planned absence day alongside Brown. Mom and the college office sort that out, not you."},
-
- {d:"2026-09-03",tag:"ONE BOOKING",cls:"",who:"g",mins:"15 min",
-  task:"<b>Book the Connecticut College online interview</b> for mid-September: 30 minutes, on Zoom, counts in your file, window runs to mid-December. That is the whole task.",
-  extra:"If Hamilton is staying, its video interview books the same way, most weekdays; their ED-round cutoff is Nov 19. One booking today is enough."},
-
- {d:"2026-09-04",tag:"REST",cls:"off",who:"g",mins:"0 min",
-  task:"<b>Nothing college. First week of preseason is enough.</b>",extra:""},
-
- {d:"2026-09-05",tag:"LONG WEEKEND",cls:"off",who:"g",mins:"0 min",
-  task:"<b>Labor Day weekend, and no school on the list runs tours this weekend</b> (checked: Brown, Brandeis, Skidmore, Swarthmore, Williams calendars are all dark Sept 5 to 7). Rest, or one virtual tour if you feel like it.",
-  extra:"The visit calendar after this: Philadelphia over the Sept 19 weekend with the tours on Mon Sept 21, a no-school day; Wesleyan Sat Sept 26 at noon; Conn College at its Oct 12 Open House, also a no-school day."},
+ {d:"2026-09-05",tag:"ONE FORM",cls:"",who:"g",mins:"10 min",
+  task:"<b>Send back the transcript review form, if it is still sitting there.</b> It was due Fri 8/28 and it is the one thing another office is waiting on: the college office cannot send a transcript anywhere until you sign off that it is accurate. It is in your school email from the college office, subject <b>Your the school Transcript: Review and Respond</b>, June 17, with the PDF attached. <a href='https://docs.google.com/forms/d/e/1FAIpQLSfk62KBE_geHJMtc__n3M7X_LWnAK3kHKG2OY2KwUfvgESSPA/viewform' target='_blank'>Open the form</a>. If you already sent it, today is a rest day and nothing here is owed.",
+  extra:"What to check on the PDF: your name exactly as it should read on applications and the diploma, birth date, entrance date, address, and every course and grade. Senior-year courses show up after add/drop, so their absence is not a mistake. Name or address fixes do not go on the form, they go in Veracross under My Household.<br><br>No tours anywhere on the list this weekend: re-checked live today, Brandeis and Wesleyan are both closed Sept 5, 6 and 7, and Brown stays dark until Sept 28. The next bookable thing is Wesleyan on Tue Sept 8."},
 
  {d:"2026-09-06",tag:"WEEKEND",cls:"off",who:"g",mins:"0 min",
-  task:"<b>Still the long weekend. Nothing scheduled.</b>",extra:""},
+  task:"<b>Still the long weekend. Nothing scheduled.</b>",
+  extra:"If you and Mom want the ranking talk today, this is the clear 45 minutes; it has not happened yet and nothing comes off the list before you two decide together. If today does not work, Sun Sept 13 is the next window."},
+
+ {d:"2026-09-07",tag:"LABOR DAY",cls:"off",who:"g",mins:"0 min",
+  task:"<b>Labor Day. No school, no tours anywhere on the list</b> (verified 9/5).",extra:""},
+
+ {d:"2026-09-08",tag:"ONE BOOKING",cls:"",who:"g",mins:"15 min",
+  task:"<b>Book Wesleyan for Sat Sept 26.</b> Its calendar opens today, verified live 9/5: closed through Sept 7, open every day from Sept 8, and Sat Sept 26 shows a Fall Saturday campus visit. It is the last unvisited New England match and a Saturday costs no absence. <a href='https://admission.wesleyan.edu/portal/campusvisit' target='_blank'>Book it</a>, and take the time the portal offers rather than assuming noon.",
+  extra:"That is the whole task. If the Conn College online interview still is not booked from last week, it takes the same fifteen minutes and can wait for tomorrow."},
+
+ {d:"2026-09-09",tag:"FROM HOME",cls:"",who:"g",mins:"20 min",
+  task:"<b>Book the Connecticut College online interview</b> for mid-September if it is not already booked: 30 minutes on Zoom, it goes in your file, and the window runs to mid-December.",
+  extra:"Hamilton's video interview books the same way most weekdays if Hamilton is staying on the list; its ED-round cutoff is Nov 19."},
+
+ {d:"2026-09-10",tag:"ESSAY",cls:"",who:"g",mins:"25 min",
+  task:"<b>One sitting on the personal statement.</b> Whichever is next: finish the draft, work the fixes, or rewrite the opening. One 25-minute pass, then stop.",
+  extra:"If no adult reader has it yet, sending it unfinished to one person counts as the sitting."},
+
+ {d:"2026-09-11",tag:"LIGHT",cls:"off",who:"g",mins:"0 min",
+  task:"<b>Nothing college. Second week of preseason.</b>",
+  extra:"Haverford posts its fall weekday tours mid-September; that is a parent item, not yours."},
+
+ {d:"2026-09-12",tag:"WEEKEND",cls:"off",who:"g",mins:"0 min",
+  task:"<b>Free.</b> One 15-minute SAT Coach set if you want it, and only if you want it.",extra:""},
+
+ {d:"2026-09-13",tag:"THE TALK",cls:"",who:"b",mins:"45 min",
+  task:"<b>The ranking talk with Mom, if Sept 6 did not happen.</b> Every school in or out, in one sitting, so the fall list stops being a question. Nothing gets cut without both of you.",
+  extra:"Bring the visit debriefs you have: Clark 7/11 and Vassar 8/28 are the two that are still unfilled in the <a href='planner.html'>visit toolkit</a>."},
 ];
 
 /* groups are computed from the current date at render time; see paint() */
