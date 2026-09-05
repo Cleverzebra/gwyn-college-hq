@@ -455,7 +455,11 @@ const shortTag=e=>SHORT[e.tag]||e.tag.toLowerCase();
 (function(){
   let e=DAYS.find(x=>x.d===TODAY);
   if(TODAY<"2026-08-24")e=DAYS[0];
-  const done=TODAY>"2026-09-06";
+  /* fall mode starts only once the day cards actually run out. This was
+     hardcoded to 2026-09-06 and did not move when cards were added through
+     9/13, which would have hidden a week of real cards from Sept 7 on. */
+  const LASTDAY=DAYS.reduce((a,x)=>x.d>a?x.d:a,DAYS[0].d);
+  const done=TODAY>LASTDAY;
   if(done||!e){
     /* fall mode: computed fresh from the real date every time the page opens */
     const MILES=[
