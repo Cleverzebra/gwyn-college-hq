@@ -539,7 +539,7 @@ const shortTag=e=>SHORT[e.tag]||e.tag.toLowerCase();
       <span class="dn">${dt.toLocaleDateString(undefined,{weekday:"short"})} ${dt.getDate()}</span>
       <span class="ic2">${icon(e)}</span>${shortTag(e)}</a>`;
   }
-  $("#weekStrip").innerHTML=h||'<div class="hint">The August plan is finished.</div>';
+  $("#weekStrip").innerHTML=h||'<div class="hint">The planned days are finished. Time to add the next stretch.</div>';
 })();
 
 /* calendar. Rendered once; ticking updates in place so open folds and scroll survive. */
